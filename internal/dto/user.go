@@ -10,6 +10,7 @@ type RequestUserDTO struct {
 	SurName               string    `json:"sur_name" binding:"required,max=100"`
 	LastName              string    `json:"last_name" binding:"required,max=100"`
 	Email                 string    `json:"email" binding:"required,email"`
+	Password              string    `json:"password" binding:"required"`
 	DOB                   time.Time `json:"dob" binding:"required"`
 	Gender                string    `json:"gender"`
 	Phone                 string    `json:"phone" binding:"required,len=11"`
@@ -62,6 +63,7 @@ func (dto RequestUserDTO) ToUser() models.User {
 		SurName:               dto.SurName,
 		LastName:              dto.LastName,
 		Email:                 dto.Email,
+		Password:              dto.Password,
 		DOB:                   dto.DOB,
 		Gender:                dto.Gender,
 		Phone:                 dto.Phone,

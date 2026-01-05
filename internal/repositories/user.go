@@ -2,7 +2,9 @@ package repositories
 
 import (
 	"context"
+	"errors"
 
+	backend "github.com/billzayy/timesheet-management-be"
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/models"
 	"gorm.io/gorm"
@@ -10,8 +12,10 @@ import (
 
 type UserRepository interface {
 	Create(ctx context.Context, user *models.User) error
-	FindAll(ctx context.Context) ([]dto.GetUserDTO, error)
+	FindAll(ctx context.Context, limit, offset int) ([]dto.GetUserDTO, error)
 	FindByEmail(ctx context.Context, email string) (dto.GetUserDTO, error)
+	Delete(ctx context.Context, email string) error
+	CheckEmailAndPassword(ctx context.Context, email string) (*models.User, error)
 }
 
 type userRepo struct {
@@ -26,7 +30,7 @@ func (r *userRepo) Create(ctx context.Context, user *models.User) error {
 	return gorm.G[models.User](r.db).Create(ctx, user)
 }
 
-func (r *userRepo) FindAll(ctx context.Context) ([]dto.GetUserDTO, error) {
+func (r *userRepo) FindAll(ctx context.Context, limit, offset int) ([]dto.GetUserDTO, error) {
 	var result []dto.GetUserDTO
 
 	err := r.db.WithContext(ctx).
@@ -61,6 +65,8 @@ func (r *userRepo) FindAll(ctx context.Context) ([]dto.GetUserDTO, error) {
 		Joins("LEFT JOIN levels ON levels.id = users.level_id").
 		Joins("LEFT JOIN positions ON positions.id = users.position_id").
 		Joins("LEFT JOIN user_type ON user_type.id = users.user_type_id").
+		Limit(limit).
+		Offset(offset).
 		Scan(&result).Error
 
 	return result, err
@@ -101,7 +107,35 @@ func (r *userRepo) FindByEmail(ctx context.Context, email string) (dto.GetUserDT
 		Joins("LEFT JOIN levels ON levels.id = users.level_id").
 		Joins("LEFT JOIN positions ON positions.id = users.position_id").
 		Joins("LEFT JOIN user_type ON user_type.id = users.user_type_id").
-		Where("users.email = ?", email).Scan(&result).Error
+		Where("users.email = ?", email).Find(&result).Error
+
+	if result.Email == "" {
+		return result, backend.ErrUserNotFound
+	}
 
 	return result, err
+}
+
+func (r *userRepo) Delete(ctx context.Context, email string) error {
+	rowAffected, err := gorm.G[models.User](r.db).Where("email = ?", email).Delete(ctx)
+
+	if err != nil {
+		return err
+	}
+
+	if rowAffected == 0 {
+		return backend.ErrUserNotFound
+	}
+
+	return nil
+}
+
+func (r *userRepo) CheckEmailAndPassword(ctx context.Context, email string) (*models.User, error) {
+	data, err := gorm.G[models.User](r.db).Where("email = ?", email).First(ctx)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, backend.ErrUserNotFound
+	}
+
+	return &data, nil
 }

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	backend "github.com/billzayy/timesheet-management-be"
@@ -57,7 +58,10 @@ func (h *UserHandler) GetAll(c *gin.Context) {
 
 	var errStr string
 
-	users, err := h.service.GetAllUsers(ctx)
+	limit := c.Query("limit")
+	offset := c.Query("offset")
+
+	users, err := h.service.GetAllUsers(ctx, limit, offset)
 
 	if err != nil {
 		errStr = err.Error()
@@ -109,11 +113,46 @@ func (h *UserHandler) GetByEmail(c *gin.Context) {
 		return
 	}
 
-	data, err := h.service.GetUserByEmail(ctx, email)
+	data, err := h.service.GetByEmail(ctx, email)
 
 	if err != nil {
-		errStr = err.Error()
-		c.JSON(http.StatusInternalServerError, backend.ResponseData{
+		errStr := err.Error()
+
+		switch {
+		case errors.Is(err, backend.ErrUserNotFound):
+			c.JSON(http.StatusNotFound, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		default:
+			c.JSON(http.StatusInternalServerError, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, backend.ResponseData{
+		Result:  data,
+		Success: true,
+		Error:   nil,
+	})
+}
+
+func (h *UserHandler) Delete(c *gin.Context) {
+	ctx := context.Background()
+
+	var errStr string
+
+	email := c.Query("email")
+
+	if email == "" {
+		errStr = "input must not be empty"
+
+		c.JSON(http.StatusBadRequest, backend.ResponseData{
 			Result:  "Error",
 			Success: false,
 			Error:   &errStr,
@@ -121,8 +160,42 @@ func (h *UserHandler) GetByEmail(c *gin.Context) {
 		return
 	}
 
+	// Validate email format
+	if validator.New().Var(email, "email") != nil {
+		errStr = "failed to validate email format"
+
+		c.JSON(http.StatusBadRequest, backend.ResponseData{
+			Result:  "Error",
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	err := h.service.DeleteByEmail(ctx, email)
+
+	if err != nil {
+		errStr := err.Error()
+
+		switch {
+		case errors.Is(err, backend.ErrUserNotFound):
+			c.JSON(http.StatusNotFound, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		default:
+			c.JSON(http.StatusInternalServerError, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		}
+		return
+	}
+
 	c.JSON(http.StatusOK, backend.ResponseData{
-		Result:  data,
+		Result:  "Delete user successful",
 		Success: true,
 		Error:   nil,
 	})

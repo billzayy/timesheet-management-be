@@ -32,6 +32,7 @@ type User struct {
 	BranchID              int64      `gorm:"type:bigint;not null" json:"branch_id"`
 	PositionID            int64      `gorm:"type:bigint;not null" json:"position_id"`
 	UserTypeID            int64      `gorm:"type:bigint;not null" json:"user_type_id"`
+	Password              string     `gorm:"type:varchar(255); not null" json:"password"`
 }
 
 func (User) TableName() string {
