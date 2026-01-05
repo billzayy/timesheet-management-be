@@ -1,0 +1,64 @@
+### Create User
+
+POST {{BASE_URL}}/api/user/create HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+Content-Type: application/json
+
+{
+  "address": "456 Tran Phu, Hanoi",
+  "avatar_path": "/avatars/user123.png",
+  "bank_account": "123456789012",
+  "branch_id": 1,
+  "current_address": "123 Le Loi, Hanoi",
+  "dob": "1995-07-15T00:00:00Z",
+  "email": "nguyen.minh123@example.com",
+  "emergency_contact": "Tran Van B",
+  "emergency_contact_phone": "09876543210",
+  "gender": "male",
+  "identify_issue_date": "2015-03-20T00:00:00Z",
+  "identify_number": "012345678901",
+  "identify_place": "Hanoi",
+  "last_name": "Minh",
+  "level_id": 1,
+  "mezon_id": "MEZON001",
+  "password": "S3cureP@ssw0rd",
+  "phone": "09123456781",
+  "position_id": 3,
+  "sur_name": "Nguyen",
+  "tax_code": "TX1234",
+  "user_type_id": 1
+}
+
+
+### Get All User
+
+GET {{BASE_URL}}/api/user/all?limit=10&offset=0 HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Get User By Email
+
+GET {{BASE_URL}}/api/user?email=nguyen.minh123@example.com HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Delete User
+
+DELETE {{BASE_URL}}/api/user?email=nguyen.minh123@example.com HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Login
+
+POST {{BASE_URL}}/api/auth/login HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "tuan.phan@gmail.com",
+  "password": "20102002"
+}
