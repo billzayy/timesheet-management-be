@@ -101,31 +101,89 @@ func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr strin
 }
 
 func (s *userService) GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error) {
-	return s.repo.FindByEmail(ctx, email)
+	r, err := s.repo.FindByEmail(ctx, email)
+
+	if err != nil {
+		return dto.GetUserDTO{}, err
+	}
+
+	result := dto.GetUserDTO{
+		FullName:              r.FullName,
+		Email:                 r.Email,
+		DOB:                   r.DOB,
+		Gender:                r.Gender,
+		Phone:                 r.Phone,
+		CurrentAddress:        r.CurrentAddress,
+		Address:               r.Address,
+		AvatarPath:            r.AvatarPath,
+		BankAccount:           *r.BankAccount,
+		IdentifyNumber:        *r.IdentifyNumber,
+		IdentifyIssueDate:     *r.IdentifyIssueDate,
+		IdentifyPlace:         *r.IdentifyPlace,
+		EmergencyContact:      r.EmergencyContact,
+		EmergencyContactPhone: r.EmergencyContactPhone,
+		TaxCode:               r.TaxCode,
+		MezonID:               r.MezonID,
+		LevelID:               r.LevelID,
+		BranchID:              r.BranchID,
+		PositionID:            r.PositionID,
+		UserTypeID:            r.UserTypeID,
+		BranchName:            *r.BranchName,
+		LevelName:             *r.LevelName,
+		PositionName:          *r.PositionName,
+		UserTypeName:          *r.UserTypeName,
+		MorningStartAt:        r.MorningStartAt,
+		MorningEndAt:          r.MorningEndAt,
+		MorningWorkingTime:    r.MorningWorkingTime,
+		AfternoonStartAt:      r.AfternoonStartAt,
+		AfternoonEndAt:        r.AfternoonEndAt,
+		AfternoonWorkingTime:  r.AfternoonWorkingTime,
+	}
+
+	return result, nil
 }
 
 func (s *userService) GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error) {
-	data, err := s.repo.FindById(ctx, id)
+	r, err := s.repo.FindById(ctx, id)
 
 	if err != nil {
 		return dto.GetUserDTO{}, err
 	}
 
-	time, err := s.repo.FindWorkingTime(ctx, id)
-
-	if err != nil {
-		return dto.GetUserDTO{}, err
+	result := dto.GetUserDTO{
+		FullName:              r.FullName,
+		Email:                 r.Email,
+		DOB:                   r.DOB,
+		Gender:                r.Gender,
+		Phone:                 r.Phone,
+		CurrentAddress:        r.CurrentAddress,
+		Address:               r.Address,
+		AvatarPath:            r.AvatarPath,
+		BankAccount:           *r.BankAccount,
+		IdentifyNumber:        *r.IdentifyNumber,
+		IdentifyIssueDate:     *r.IdentifyIssueDate,
+		IdentifyPlace:         *r.IdentifyPlace,
+		EmergencyContact:      r.EmergencyContact,
+		EmergencyContactPhone: r.EmergencyContactPhone,
+		TaxCode:               r.TaxCode,
+		MezonID:               r.MezonID,
+		LevelID:               r.LevelID,
+		BranchID:              r.BranchID,
+		PositionID:            r.PositionID,
+		UserTypeID:            r.UserTypeID,
+		BranchName:            *r.BranchName,
+		LevelName:             *r.LevelName,
+		PositionName:          *r.PositionName,
+		UserTypeName:          *r.UserTypeName,
+		MorningStartAt:        r.MorningStartAt,
+		MorningEndAt:          r.MorningEndAt,
+		MorningWorkingTime:    r.MorningWorkingTime,
+		AfternoonStartAt:      r.AfternoonStartAt,
+		AfternoonEndAt:        r.AfternoonEndAt,
+		AfternoonWorkingTime:  r.AfternoonWorkingTime,
 	}
 
-	data.MorningStartAt = time.MorningStartAt
-	data.MorningEndAt = time.MorningEndAt
-	data.MorningWorkingTime = time.MorningWorkingTime
-
-	data.AfternoonStartAt = time.MorningStartAt
-	data.AfternoonEndAt = time.MorningEndAt
-	data.AfternoonWorkingTime = time.MorningWorkingTime
-
-	return data, nil
+	return result, nil
 }
 
 func (s *userService) DeleteByEmail(ctx context.Context, email string) error {

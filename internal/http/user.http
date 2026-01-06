@@ -40,7 +40,7 @@ Authorization: Bearer {{JWT_TOKEN}}
 
 ### Get User By Email
 
-GET {{BASE_URL}}/api/user/by-email?email=nguyen.minh123@example.com HTTP/1.1
+GET {{BASE_URL}}/api/user/by-email?email=anh.truongdieu@ncc.asia HTTP/1.1
 Accept: application/json
 Content-Type: application/json
 Authorization: Bearer {{JWT_TOKEN}}
