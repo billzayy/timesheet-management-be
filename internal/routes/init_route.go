@@ -8,4 +8,5 @@ import (
 func Register(r *gin.Engine, h *handlers.Handlers) {
 	authRoute(r, h)
 	userRoute(r, h)
+	organizationRoute(r, h)
 }

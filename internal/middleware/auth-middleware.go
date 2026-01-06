@@ -28,7 +28,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		// Store userID in context for handlers to use
-		c.Set("id", userID)
+		c.Set("token", userID)
 
 		// Proceed to the next middleware/handler
 		c.Next()
