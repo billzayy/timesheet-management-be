@@ -20,6 +20,12 @@ type OrganizeRepository interface {
 	CreatePosition(ctx context.Context, input models.Position) error
 	UpdatePosition(ctx context.Context, input dto.PositionDTO) error
 	DeletePosition(ctx context.Context, id int64) error
+
+	/* User Type */
+	FindAllUserType(ctx context.Context, limit, offset int) ([]models.UserType, error)
+	CreateUserType(ctx context.Context, input models.UserType) error
+	UpdateUserType(ctx context.Context, input dto.UserTypeDTO) error
+	DeleteUserType(ctx context.Context, id int64) error
 }
 
 type organizeRepo struct {

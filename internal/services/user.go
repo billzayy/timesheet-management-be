@@ -8,12 +8,14 @@ import (
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/middleware"
 	"github.com/billzayy/timesheet-management-be/internal/repositories"
+	"github.com/google/uuid"
 )
 
 type UserService interface {
 	CreateUser(ctx context.Context, dto *dto.RequestUserDTO) error
 	GetAllUsers(ctx context.Context, limit, offset string) ([]dto.GetUserDTO, error)
 	GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error)
+	GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error)
 	DeleteByEmail(ctx context.Context, email string) error
 }
 
@@ -57,6 +59,30 @@ func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr strin
 
 func (s *userService) GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error) {
 	return s.repo.FindByEmail(ctx, email)
+}
+
+func (s *userService) GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error) {
+	data, err := s.repo.FindById(ctx, id)
+
+	if err != nil {
+		return dto.GetUserDTO{}, err
+	}
+
+	time, err := s.repo.FindWorkingTime(ctx, id)
+
+	if err != nil {
+		return dto.GetUserDTO{}, err
+	}
+
+	data.MorningStartAt = time.MorningStartAt
+	data.MorningEndAt = time.MorningEndAt
+	data.MoringWorkingTime = time.MorningWorkingTime
+
+	data.AfternoonStartAt = time.MorningStartAt
+	data.AfternoonEndAt = time.MorningEndAt
+	data.AfternoonWorkingTime = time.MorningWorkingTime
+
+	return data, nil
 }
 
 func (s *userService) DeleteByEmail(ctx context.Context, email string) error {

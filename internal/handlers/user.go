@@ -10,6 +10,7 @@ import (
 	"github.com/billzayy/timesheet-management-be/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -114,6 +115,53 @@ func (h *UserHandler) GetByEmail(c *gin.Context) {
 	}
 
 	data, err := h.service.GetByEmail(ctx, email)
+
+	if err != nil {
+		errStr := err.Error()
+
+		switch {
+		case errors.Is(err, backend.ErrUserNotFound):
+			c.JSON(http.StatusNotFound, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		default:
+			c.JSON(http.StatusInternalServerError, backend.ResponseData{
+				Result:  "Error",
+				Success: false,
+				Error:   &errStr,
+			})
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, backend.ResponseData{
+		Result:  data,
+		Success: true,
+		Error:   nil,
+	})
+}
+
+func (h *UserHandler) GetById(c *gin.Context) {
+	ctx := context.Background()
+
+	var errStr string
+
+	id := c.Param("id")
+
+	if id == "" {
+		errStr = "input must not be empty"
+
+		c.JSON(http.StatusBadRequest, backend.ResponseData{
+			Result:  "Error",
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	data, err := h.service.GetById(ctx, uuid.MustParse(id))
 
 	if err != nil {
 		errStr := err.Error()

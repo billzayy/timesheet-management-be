@@ -29,6 +29,12 @@ type LevelDTO struct {
 	Color       string `json:"color" binding:"required"`
 }
 
+type UserTypeDTO struct {
+	ID   int64  `gorm:"primaryKey;autoIncrement" json:"id"`
+	Name string `gorm:"type:varchar(255);not null;uniqueIndex" json:"name"`
+	Code string `gorm:"type:varchar(10);not null;uniqueIndex" json:"code"`
+}
+
 func (dto PositionDTO) ToCreatePosition(id uuid.UUID) models.Position {
 	return models.Position{
 		Name:      dto.Name,
@@ -46,5 +52,13 @@ func (dto LevelDTO) ToCreateLevel(id uuid.UUID) models.Level {
 		Code:        dto.Code,
 		Color:       dto.Color,
 		CreatedBy:   id,
+	}
+
+}
+func (dto UserTypeDTO) ToCreateUserType(id uuid.UUID) models.UserType {
+	return models.UserType{
+		Name:      dto.Name,
+		Code:      dto.Code,
+		CreatedBy: id,
 	}
 }

@@ -22,4 +22,12 @@ func organizationRoute(r *gin.Engine, h *handlers.Handlers) {
 		levelGroup.PUT("/update", h.OrganizeHandler.UpdateLevel)
 		levelGroup.DELETE("/delete", h.OrganizeHandler.DeleteLevel)
 	}
+
+	userTypeGroup := r.Group("/api/user-type", middleware.AuthMiddleware())
+	{
+		userTypeGroup.GET("/all", h.OrganizeHandler.GetAllUserTypes)
+		userTypeGroup.POST("/create", h.OrganizeHandler.CreateUserType)
+		userTypeGroup.PUT("/update", h.OrganizeHandler.UpdateUserType)
+		userTypeGroup.DELETE("/delete", h.OrganizeHandler.DeleteUserType)
+	}
 }

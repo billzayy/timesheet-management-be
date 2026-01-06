@@ -32,7 +32,7 @@ func VerifyAccessToken(tokenString string) (string, error) {
 		return "", errors.New("invalid token claims")
 	}
 
-	id, ok := claims["userId"].(string)
+	id, ok := claims["id"].(string)
 	if !ok {
 		return "", errors.New("sub claim missing or invalid")
 	}

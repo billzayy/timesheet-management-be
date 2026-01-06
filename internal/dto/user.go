@@ -49,13 +49,19 @@ type GetUserDTO struct {
 	TaxCode               *string   `json:"tax_code,omitempty"`
 	MezonID               string    `json:"mezon_id" `
 	LevelID               int64     `json:"level_id" `
-	BranchID              int64     `json:"branch_id" `
-	PositionID            int64     `json:"position_id" `
-	UserTypeID            int64     `json:"user_type_id" `
-	BranchName            string    `json:"branch_name"`
 	LevelName             string    `json:"level_name"`
+	BranchID              int64     `json:"branch_id" `
+	BranchName            string    `json:"branch_name"`
+	PositionID            int64     `json:"position_id" `
 	PositionName          string    `json:"position_name"`
+	UserTypeID            int64     `json:"user_type_id" `
 	UserTypeName          string    `json:"user_type_name"`
+	MoringWorkingTime     float64   `json:"morning_working_time"`
+	MorningStartAt        string    `json:"morning_start_at"`
+	MorningEndAt          string    `json:"morning_end_at"`
+	AfternoonStartAt      string    `json:"afternoon_start_at"`
+	AfternoonEndAt        string    `json:"afternoon_end_at"`
+	AfternoonWorkingTime  float64   `json:"afternoon_working_time"`
 }
 
 func (dto RequestUserDTO) ToUser() models.User {

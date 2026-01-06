@@ -20,6 +20,12 @@ type OrganizeService interface {
 	CreatePosition(ctx context.Context, input dto.PositionDTO, id uuid.UUID) error
 	UpdatePosition(ctx context.Context, input dto.PositionDTO) error
 	DeletePosition(ctx context.Context, id int64) error
+
+	/* User Type */
+	GetAllUserTypes(ctx context.Context, limit, offset int) ([]dto.UserTypeDTO, error)
+	CreateUserType(ctx context.Context, input dto.UserTypeDTO, id uuid.UUID) error
+	UpdateUserType(ctx context.Context, input dto.UserTypeDTO) error
+	DeleteUserType(ctx context.Context, id int64) error
 }
 
 type organizeService struct {

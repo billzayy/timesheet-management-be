@@ -7,6 +7,7 @@ import (
 	backend "github.com/billzayy/timesheet-management-be"
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -14,8 +15,10 @@ type UserRepository interface {
 	Create(ctx context.Context, user *models.User) error
 	FindAll(ctx context.Context, limit, offset int) ([]dto.GetUserDTO, error)
 	FindByEmail(ctx context.Context, email string) (dto.GetUserDTO, error)
+	FindById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error)
 	Delete(ctx context.Context, email string) error
 	CheckEmailAndPassword(ctx context.Context, email string) (*models.User, error)
+	FindWorkingTime(ctx context.Context, userId uuid.UUID) (dto.WorkingTimeDTO, error)
 }
 
 type userRepo struct {
@@ -108,6 +111,50 @@ func (r *userRepo) FindByEmail(ctx context.Context, email string) (dto.GetUserDT
 		Joins("LEFT JOIN positions ON positions.id = users.position_id").
 		Joins("LEFT JOIN user_type ON user_type.id = users.user_type_id").
 		Where("users.email = ?", email).Find(&result).Error
+
+	if result.Email == "" {
+		return result, backend.ErrUserNotFound
+	}
+
+	return result, err
+}
+
+func (r *userRepo) FindById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error) {
+	var result dto.GetUserDTO
+
+	err := r.db.WithContext(ctx).
+		Table("users").
+		Select(`
+			COALESCE(users.sur_name, '') || ' ' || COALESCE(users.last_name, '') AS full_name,
+			users.email,
+			users.dob,
+			users.gender,
+			users.phone,
+			users.current_address,
+			users.address,
+			users.avatar_path,
+			users.bank_account,
+			users.identify_number,
+			users.identify_issue_date,
+			users.identify_place,
+			users.emergency_contact,
+			users.emergency_contact_phone,
+			users.tax_code,
+			users.mezon_id,
+			users.level_id,
+			users.branch_id,
+			users.position_id,
+			users.user_type_id,
+			branches.name  AS branch_name,
+			levels.name    AS level_name,
+			positions.name AS position_name,
+			user_type.name AS user_type_name
+		`).
+		Joins("LEFT JOIN branches ON branches.id = users.branch_id").
+		Joins("LEFT JOIN levels ON levels.id = users.level_id").
+		Joins("LEFT JOIN positions ON positions.id = users.position_id").
+		Joins("LEFT JOIN user_type ON user_type.id = users.user_type_id").
+		Where("users.id = ?", id).Find(&result).Error
 
 	if result.Email == "" {
 		return result, backend.ErrUserNotFound

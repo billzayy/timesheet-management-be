@@ -88,3 +88,53 @@ DELETE {{BASE_URL}}/api/level/delete?id=34 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Get All User Type
+
+GET {{BASE_URL}}/api/user-type/all?limit=20&offset=0 HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Create User Type
+
+POST {{BASE_URL}}/api/user-type/create HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "code": "test 1",
+  "name": "Testing 1"
+}
+
+
+### Update User Type
+
+PUT {{BASE_URL}}/api/user-type/update HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "code": "test 2",
+  "id": 12,
+  "name": "Testing Changed"
+}
+
+
+### Delete User Type
+
+DELETE {{BASE_URL}}/api/user-type/delete?id=12 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Get working time
+
+GET {{BASE_URL}}/api/working-time/abdeed38-642f-4435-829b-6a27a8d7f33c HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
