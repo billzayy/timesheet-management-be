@@ -56,7 +56,7 @@ type GetUserDTO struct {
 	PositionName          string    `json:"position_name"`
 	UserTypeID            int64     `json:"user_type_id" `
 	UserTypeName          string    `json:"user_type_name"`
-	MoringWorkingTime     float64   `json:"morning_working_time"`
+	MorningWorkingTime    float64   `json:"morning_working_time"`
 	MorningStartAt        string    `json:"morning_start_at"`
 	MorningEndAt          string    `json:"morning_end_at"`
 	AfternoonStartAt      string    `json:"afternoon_start_at"`
