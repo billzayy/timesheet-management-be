@@ -7,6 +7,13 @@ import (
 )
 
 func organizationRoute(r *gin.Engine, h *handlers.Handlers) {
+	branchGroup := r.Group("/api/branch", middleware.AuthMiddleware())
+	{
+		branchGroup.GET("/all", h.OrganizeHandler.GetAllBranches)
+		branchGroup.POST("/create", h.OrganizeHandler.CreateBranch)
+		branchGroup.PUT("/update", h.OrganizeHandler.UpdateBranch)
+		branchGroup.DELETE("/delete", h.OrganizeHandler.DeleteBranch)
+	}
 	positionGroup := r.Group("/api/position", middleware.AuthMiddleware())
 	{
 		positionGroup.GET("/all", h.OrganizeHandler.GetAllPositions)

@@ -130,3 +130,49 @@ DELETE {{BASE_URL}}/api/user-type/delete?id=13 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Get All Branch
+
+GET {{BASE_URL}}/api/branch/all?limit=10&offset=0 HTTP/1.1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+
+### Create Branch
+
+POST {{BASE_URL}}/api/branch/create HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "code": "ĐN",
+  "color": "#f1983",
+  "display_name": "ĐN",
+  "name": "Đà Nẵng"
+}
+
+
+### Update Branch
+
+PUT {{BASE_URL}}/api/branch/update HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+  "code": "test 2",
+  "color": "#f1983",
+  "display_name": "Testing 2",
+  "id": 23,
+  "name": "Testing Changed"
+}
+
+
+### Delete Branch
+
+DELETE {{BASE_URL}}/api/branch/delete?id=23 HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}

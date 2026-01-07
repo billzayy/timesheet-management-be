@@ -9,6 +9,12 @@ import (
 )
 
 type OrganizeService interface {
+	/* Branches */
+	GetAllBranches(ctx context.Context, limit, offset int) ([]dto.BranchDTO, error)
+	CreateBranch(ctx context.Context, input dto.BranchDTO, id uuid.UUID) error
+	UpdateBranch(ctx context.Context, input dto.BranchDTO) error
+	DeleteBranch(ctx context.Context, id int64) error
+
 	/* Levels */
 	GetAllLevels(ctx context.Context, limit, offset int) ([]dto.LevelDTO, error)
 	CreateLevel(ctx context.Context, input dto.LevelDTO, id uuid.UUID) error

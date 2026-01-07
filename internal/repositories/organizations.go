@@ -8,6 +8,12 @@ import (
 )
 
 type OrganizeRepository interface {
+	/* Branches */
+	FindAllBranches(ctx context.Context, limit, offset int) ([]models.BranchRead, error)
+	CreateBranch(ctx context.Context, input models.Branch) error
+	UpdateBranch(ctx context.Context, input models.Branch) error
+	DeleteBranch(ctx context.Context, id int64) error
+
 	/* Levels */
 	FindAllLevel(ctx context.Context, limit, offset int) ([]models.Level, error)
 	CreateLevel(ctx context.Context, input models.Level) error

@@ -84,7 +84,53 @@ GROUP BY
     p.name,
     ut.name;
 
-/* Select View */
-SELECT * FROM user_daily_summary_v
-ORDER BY user_id
-LIMIT 10 OFFSET 0;
+/* Branch Working Time View */
+CREATE OR REPLACE VIEW branch_working_time_summary_v AS
+SELECT
+	b.id,
+  b.name,
+	b.display_name,
+	b.code,
+	b.color,
+
+    /* Morning shift */
+    MIN(wt.start_time)
+        FILTER (WHERE wt.shift_name = 'morning') AS morning_start_at,
+
+    MAX(wt.end_time)
+        FILTER (WHERE wt.shift_name = 'morning') AS morning_end_at,
+
+    ROUND(
+        (
+            SUM(
+                EXTRACT(EPOCH FROM
+                    GREATEST(wt.end_time - wt.start_time, INTERVAL '0')
+                ) / 3600
+            )
+            FILTER (WHERE wt.shift_name = 'morning')
+        )::numeric,
+        1
+    ) AS morning_working_time,
+
+    /* Afternoon shift */
+    MIN(wt.start_time)
+        FILTER (WHERE wt.shift_name = 'afternoon') AS afternoon_start_at,
+
+    MAX(wt.end_time)
+        FILTER (WHERE wt.shift_name = 'afternoon') AS afternoon_end_at,
+
+    ROUND(
+        (
+            SUM(
+                EXTRACT(EPOCH FROM
+                    GREATEST(wt.end_time - wt.start_time, INTERVAL '0')
+                ) / 3600
+            )
+            FILTER (WHERE wt.shift_name = 'afternoon')
+        )::numeric,
+        1
+    ) AS afternoon_working_time
+
+FROM branches b
+LEFT JOIN working_times wt ON wt.entity_id = b.uuid AND wt.entity_type = 'branch'
+GROUP BY b.id;

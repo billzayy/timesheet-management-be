@@ -6,11 +6,17 @@ import (
 )
 
 type BranchDTO struct {
-	ID          int64  `json:"id"`
-	Name        string `json:"name"`
-	DisplayName string `json:"display_name"`
-	Code        string `json:"code"`
-	Color       string `json:"color"`
+	ID                   int64   `json:"id"`
+	Name                 string  `json:"name" binding:"required"`
+	DisplayName          string  `json:"display_name" binding:"required"`
+	Code                 string  `json:"code" binding:"required"`
+	Color                string  `json:"color" binding:"required"`
+	MorningWorkingTime   float64 `json:"morning_working_time"`
+	MorningStartAt       string  `json:"morning_start_at"`
+	MorningEndAt         string  `json:"morning_end_at"`
+	AfternoonStartAt     string  `json:"afternoon_start_at"`
+	AfternoonEndAt       string  `json:"afternoon_end_at"`
+	AfternoonWorkingTime float64 `json:"afternoon_working_time"`
 }
 
 type PositionDTO struct {
@@ -33,6 +39,27 @@ type UserTypeDTO struct {
 	ID   int64  `json:"id"`
 	Name string `json:"name" binding:"required"`
 	Code string `json:"code" binding:"required"`
+}
+
+func (dto BranchDTO) ToCreateBranch(id uuid.UUID) models.Branch {
+
+	return models.Branch{
+		Name:        dto.Name,
+		DisplayName: dto.DisplayName,
+		Code:        dto.Code,
+		Color:       dto.Color,
+		CreatedBy:   id,
+	}
+}
+
+func (dto BranchDTO) ToUpdateBranch() models.Branch {
+	return models.Branch{
+		ID:          dto.ID,
+		Name:        dto.Name,
+		DisplayName: dto.DisplayName,
+		Code:        dto.Code,
+		Color:       dto.Color,
+	}
 }
 
 func (dto PositionDTO) ToCreatePosition(id uuid.UUID) models.Position {

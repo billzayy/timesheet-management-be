@@ -46,6 +46,7 @@ CREATE TABLE Branches(
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid NOT NULL,
+  uuid UUID DEFAULT gen_random_uuid() NOT NULL;
   FOREIGN KEY(created_by) REFERENCES Users(id)
 );
 
