@@ -71,17 +71,29 @@ CREATE TABLE User_Type(
 );
 
 CREATE TABLE working_times (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    entity_type entityType NOT NULL, -- 'user' or 'branch'
-    entity_id UUID NOT NULL,          -- user.id or branch.id
-    shift_name shiftType NOT NULL, -- 'morning' or 'afternoon' (or other future shifts)
-    start_time TIME NOT NULL,
-    end_time TIME NOT NULL,
-    working_hours NUMERIC(3,1) NOT NULL GENERATED ALWAYS AS (ROUND(EXTRACT(EPOCH FROM (end_time - start_time)) / 3600, 1)) STORED,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    created_by uuid NOT NULL,
-    CHECK (end_time > start_time),
-    UNIQUE (entity_type, entity_id, shift_name)
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  entity_type entityType NOT NULL, -- 'user' or 'branch'
+  entity_id UUID NOT NULL,          -- user.id or branch.id
+  shift_name shiftType NOT NULL, -- 'morning' or 'afternoon' (or other future shifts)
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  working_hours NUMERIC(3,1) NOT NULL GENERATED ALWAYS AS (ROUND(EXTRACT(EPOCH FROM (end_time - start_time)) / 3600, 1)) STORED,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_by uuid NOT NULL,
+  CHECK (end_time > start_time),
+  UNIQUE (entity_type, entity_id, shift_name)
+);
+
+CREATE TABLE permissions(
+  id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name varchar(200) NOT NULL UNIQUE,
+	display_name varchar(200) NOT NULL,
+	is_configuration bool not null default false,
+	parent_id BIGINT NULL,
+	created_by uuid NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	FOREIGN KEY (parent_id) REFERENCES permissions(id) ON DELETE CASCADE,
+	FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 
 INSERT INTO user_type (name,code,created_by)
@@ -174,6 +186,12 @@ VALUES (
   TRUE,
   NULL
 );
+
+INSERT INTO permissions (name, display_name, created_by) VALUES
+('Admin','Admin','155dd490-6528-41ba-aa16-d4ec616120fb'),
+('MyProfile','My profile','155dd490-6528-41ba-aa16-d4ec616120fb'),
+('MyTimesheet','My timesheets','155dd490-6528-41ba-aa16-d4ec616120fb'),
+('ManageTimesheet','Manage Timesheets','155dd490-6528-41ba-aa16-d4ec616120fb');
 
 ALTER TABLE users
 ADD COLUMN level_id BIGINT NOT NULL,

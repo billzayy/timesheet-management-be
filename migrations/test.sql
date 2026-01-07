@@ -58,4 +58,46 @@
 	('Senior High', 'Senior+', 'sen_high', '#ff9800','155dd490-6528-41ba-aa16-d4ec616120fb')
 	ON CONFLICT (code) DO NOTHING;
 	
-	COMMIT;
+INSERT INTO working_times (
+    entity_type,
+    entity_id,
+    shift_name,
+    start_time,
+    end_time
+) VALUES
+('branch', '7f9d7362-c70a-40f6-bc47-b8f3ab53c6bd', 'morning', '08:00', '12:00'),
+('branch', '0cf442b5-78d8-4c0b-aebd-0967fa291c0f', 'morning', '08:00', '12:00'),
+('branch', '52cbefc4-1411-4ad3-81b2-bcaed4550eca', 'morning', '08:00', '12:00'),
+('branch', '7d4e7529-b514-4a33-a411-1369c4e1bc5a', 'morning', '08:00', '12:00'),
+('branch', 'de156456-58eb-4756-bf8b-c26d063e56e6', 'morning', '08:00', '12:00'),
+('branch', '02c4a702-a1a2-4880-9ad4-8529c46909cd', 'morning', '08:00', '12:00'),
+('branch', '8c6cb11f-e9d6-4158-abb8-0e4a56373424', 'morning', '08:00', '12:00'),
+('branch', '55112fe0-8590-496b-902a-a11678448118', 'morning', '08:00', '12:00');
+
+INSERT INTO working_times (
+    entity_type,
+    entity_id,
+    shift_name,
+    start_time,
+    end_time
+) VALUES
+('branch', '7f9d7362-c70a-40f6-bc47-b8f3ab53c6bd', 'afternoon', '13:00', '17:00'),
+('branch', '0cf442b5-78d8-4c0b-aebd-0967fa291c0f', 'afternoon', '13:00', '17:00'),
+('branch', '52cbefc4-1411-4ad3-81b2-bcaed4550eca', 'afternoon', '13:00', '17:00'),
+('branch', '7d4e7529-b514-4a33-a411-1369c4e1bc5a', 'afternoon', '13:00', '17:00'),
+('branch', 'de156456-58eb-4756-bf8b-c26d063e56e6', 'afternoon', '13:00', '17:00'),
+('branch', '02c4a702-a1a2-4880-9ad4-8529c46909cd', 'afternoon', '13:00', '17:00'),
+('branch', '8c6cb11f-e9d6-4158-abb8-0e4a56373424', 'afternoon', '13:00', '17:00'),
+('branch', '55112fe0-8590-496b-902a-a11678448118', 'afternoon', '13:00', '17:00');COMMIT;
+
+-- Permissions
+INSERT INTO permissions (name, display_name, parent_id, created_by) VALUES
+('Projects', 'Projects',null, '155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Users','Users',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Roles','Roles',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Clients','Clients',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Tasks','Tasks',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Branches','Branches',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Positions','POsition',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('Levels','Levels',1,'155dd490-6528-41ba-aa16-d4ec616120fb'),
+('UserTypes','UserTypes',1,'155dd490-6528-41ba-aa16-d4ec616120fb');
