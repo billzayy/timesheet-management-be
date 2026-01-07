@@ -13,6 +13,6 @@ func userRoute(r *gin.Engine, h *handlers.Handlers) {
 		api.GET("/all", h.UserHandler.GetAll)
 		api.GET("/:id", h.UserHandler.GetById)
 		api.GET("/by-email", h.UserHandler.GetByEmail)
-		api.DELETE("/", h.UserHandler.Delete)
+		api.DELETE("", h.UserHandler.Delete)
 	}
 }

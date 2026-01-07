@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/middleware"
@@ -12,12 +14,19 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	DefaultMorningStart   = "08:00"
+	DefaultMorningEnd     = "12:00"
+	DefaultAfternoonStart = "13:00"
+	DefaultAfternoonEnd   = "17:00"
+)
+
 type UserService interface {
 	CreateUser(ctx context.Context, dto *dto.RequestUserDTO) error
 	GetAllUsers(ctx context.Context, limit, offset string) ([]dto.GetUserDTO, error)
 	GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error)
 	GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error)
-	DeleteByEmail(ctx context.Context, email string) error
+	Delete(ctx context.Context, email string) error
 }
 
 type userService struct {
@@ -28,10 +37,10 @@ func NewUserService(repo repositories.UserRepository) UserService {
 	return &userService{repo}
 }
 
-func (s *userService) CreateUser(ctx context.Context, dto *dto.RequestUserDTO) error {
-	requestUser := dto.ToUser()
+func (s *userService) CreateUser(ctx context.Context, input *dto.RequestUserDTO) error {
+	requestUser := input.ToUser()
 
-	hashedPass, err := middleware.HashPassword(dto.Password)
+	hashedPass, err := middleware.HashPassword(input.Password)
 
 	if err != nil {
 		return fmt.Errorf("failed on hash password")
@@ -39,7 +48,13 @@ func (s *userService) CreateUser(ctx context.Context, dto *dto.RequestUserDTO) e
 
 	requestUser.Password = hashedPass
 
-	return s.repo.Create(ctx, &requestUser)
+	morning, afternoon, err := getShiftTime(input)
+
+	if err != nil {
+		return err
+	}
+
+	return s.repo.Create(ctx, &requestUser, morning, afternoon)
 }
 
 func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr string) ([]dto.GetUserDTO, error) {
@@ -94,8 +109,14 @@ func (s *userService) GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO
 	return result, nil
 }
 
-func (s *userService) DeleteByEmail(ctx context.Context, email string) error {
-	return s.repo.Delete(ctx, email)
+func (s *userService) Delete(ctx context.Context, inputId string) error {
+	id, err := uuid.Parse(inputId)
+
+	if err != nil {
+		return err
+	}
+
+	return s.repo.Delete(ctx, id)
 }
 
 func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
@@ -130,5 +151,59 @@ func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
 		AfternoonStartAt:      r.AfternoonStartAt,
 		AfternoonEndAt:        r.AfternoonEndAt,
 		AfternoonWorkingTime:  r.AfternoonWorkingTime,
+		ID:                    r.UserID,
 	}
+}
+
+func getShiftTime(input *dto.RequestUserDTO) (*models.WorkingTime, *models.WorkingTime, error) {
+	morningStartAt, err := time.Parse(
+		"15:04", withDefault(input.MorningStartAt, DefaultMorningStart))
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	morningEndAt, err := time.Parse(
+		"15:04", withDefault(input.MorningEndAt, DefaultMorningEnd))
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	afternoonStartAt, err := time.Parse(
+		"15:04", withDefault(input.AfternoonStartAt, DefaultAfternoonStart))
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	afternoonEndAt, err := time.Parse(
+		"15:04", withDefault(input.AfternoonEndAt, DefaultAfternoonEnd))
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	morningShift := dto.WorkingTimeDTO{
+		ShiftName:    "morning",
+		StartTime:    morningStartAt,
+		EndTime:      morningEndAt,
+		WorkingHours: input.MorningWorkingTime,
+	}
+
+	afternoonShift := dto.WorkingTimeDTO{
+		ShiftName:    "afternoon",
+		StartTime:    afternoonStartAt,
+		EndTime:      afternoonEndAt,
+		WorkingHours: input.AfternoonWorkingTime,
+	}
+
+	return morningShift.ToWorkingTime(), afternoonShift.ToWorkingTime(), nil
+}
+
+func withDefault(value, defaultValue string) string {
+	if strings.TrimSpace(value) == "" {
+		return defaultValue
+	}
+	return value
 }

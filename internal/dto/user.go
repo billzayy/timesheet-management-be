@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/billzayy/timesheet-management-be/internal/models"
+	"github.com/google/uuid"
 )
 
 type RequestUserDTO struct {
@@ -29,6 +30,12 @@ type RequestUserDTO struct {
 	BranchID              int64     `json:"branch_id" binding:"required"`
 	PositionID            int64     `json:"position_id" binding:"required"`
 	UserTypeID            int64     `json:"user_type_id" binding:"required"`
+	MorningWorkingTime    float64   `json:"morning_working_time"`
+	MorningStartAt        string    `json:"morning_start_at"`
+	MorningEndAt          string    `json:"morning_end_at"`
+	AfternoonStartAt      string    `json:"afternoon_start_at"`
+	AfternoonEndAt        string    `json:"afternoon_end_at"`
+	AfternoonWorkingTime  float64   `json:"afternoon_working_time"`
 }
 
 type GetUserDTO struct {
@@ -62,6 +69,7 @@ type GetUserDTO struct {
 	AfternoonStartAt      string    `json:"afternoon_start_at"`
 	AfternoonEndAt        string    `json:"afternoon_end_at"`
 	AfternoonWorkingTime  float64   `json:"afternoon_working_time"`
+	ID                    uuid.UUID `json:"id"`
 }
 
 func (dto RequestUserDTO) ToUser() models.User {

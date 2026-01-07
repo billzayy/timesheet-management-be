@@ -195,9 +195,9 @@ func (h *UserHandler) Delete(c *gin.Context) {
 
 	var errStr string
 
-	email := c.Query("email")
+	id := c.Query("id")
 
-	if email == "" {
+	if id == "" {
 		errStr = "input must not be empty"
 
 		c.JSON(http.StatusBadRequest, backend.ResponseData{
@@ -208,19 +208,7 @@ func (h *UserHandler) Delete(c *gin.Context) {
 		return
 	}
 
-	// Validate email format
-	if validator.New().Var(email, "email") != nil {
-		errStr = "failed to validate email format"
-
-		c.JSON(http.StatusBadRequest, backend.ResponseData{
-			Result:  "Error",
-			Success: false,
-			Error:   &errStr,
-		})
-		return
-	}
-
-	err := h.service.DeleteByEmail(ctx, email)
+	err := h.service.Delete(ctx, id)
 
 	if err != nil {
 		errStr := err.Error()

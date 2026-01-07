@@ -6,23 +6,23 @@ Authorization: Bearer {{JWT_TOKEN}}
 Content-Type: application/json
 
 {
-  "address": "456 Tran Phu, Hanoi",
+  "address": "Ho Chi Minh, Quan 2",
   "avatar_path": "/avatars/user123.png",
-  "bank_account": "123456789012",
+  "bank_account": "918247129012",
   "branch_id": 1,
   "current_address": "123 Le Loi, Hanoi",
   "dob": "1995-07-15T00:00:00Z",
-  "email": "nguyen.minh123@example.com",
+  "email": "test@gmail.com",
   "emergency_contact": "Tran Van B",
   "emergency_contact_phone": "09876543210",
   "gender": "male",
   "identify_issue_date": "2015-03-20T00:00:00Z",
-  "identify_number": "012345678901",
+  "identify_number": "012348127311",
   "identify_place": "Hanoi",
-  "last_name": "Minh",
+  "last_name": "Tuan",
   "level_id": 1,
   "mezon_id": "MEZON001",
-  "password": "S3cureP@ssw0rd",
+  "password": "password",
   "phone": "09123456781",
   "position_id": 3,
   "sur_name": "Nguyen",
@@ -56,7 +56,7 @@ Authorization: Bearer {{JWT_TOKEN}}
 
 ### Delete User
 
-DELETE {{BASE_URL}}/api/user?email=nguyen.minh123@example.com HTTP/1.1
+DELETE {{BASE_URL}}/api/user?id=77f80e13-4bba-4b62-8354-10d12d893cdb HTTP/1.1
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
