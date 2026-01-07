@@ -84,6 +84,7 @@ GROUP BY
     p.name,
     ut.name;
 
+/* Select View */
 SELECT * FROM user_daily_summary_v
 ORDER BY user_id
 LIMIT 10 OFFSET 0;

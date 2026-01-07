@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func (s *organizeService) GetAllPositions(ctx context.Context, limit, offset int) ([]dto.PositionDTO, error) {
+func (s *organizeService) GetAllLevels(ctx context.Context, limit, offset int) ([]dto.LevelDTO, error) {
 	if limit <= 0 {
 		limit = 10
 	}
@@ -15,37 +15,39 @@ func (s *organizeService) GetAllPositions(ctx context.Context, limit, offset int
 		offset = 0
 	}
 
-	rawData, err := s.repo.FindAllPosition(ctx, limit, offset)
+	rawData, err := s.repo.FindAllLevel(ctx, limit, offset)
 
 	if err != nil {
 		return nil, err
 	}
 
-	result := make([]dto.PositionDTO, 0, len(rawData))
+	result := make([]dto.LevelDTO, 0, len(rawData))
 
 	for _, v := range rawData {
-		result = append(result, dto.PositionDTO{
-			ID:        v.ID,
-			Name:      v.Name,
-			ShortName: v.ShortName,
-			Code:      v.Code,
-			Color:     v.Color,
+		result = append(result, dto.LevelDTO{
+			ID:          v.ID,
+			Name:        v.Name,
+			DisplayName: v.DisplayName,
+			Code:        v.Code,
+			Color:       v.Color,
 		})
 	}
 
 	return result, nil
 }
 
-func (s *organizeService) CreatePosition(ctx context.Context, input dto.PositionDTO, id uuid.UUID) error {
-	convert := input.ToCreatePosition(id)
+func (s *organizeService) CreateLevel(ctx context.Context, input dto.LevelDTO, id uuid.UUID) error {
+	convert := input.ToCreateLevel(id)
 
-	return s.repo.CreatePosition(ctx, convert)
+	return s.repo.CreateLevel(ctx, convert)
 }
 
-func (s *organizeService) UpdatePosition(ctx context.Context, input dto.PositionDTO) error {
-	return s.repo.UpdatePosition(ctx, input)
+func (s *organizeService) UpdateLevel(ctx context.Context, input dto.LevelDTO) error {
+	convert := input.ToUpdateLevel()
+
+	return s.repo.UpdateLevel(ctx, convert)
 }
 
-func (s *organizeService) DeletePosition(ctx context.Context, id int64) error {
-	return s.repo.DeletePosition(ctx, id)
+func (s *organizeService) DeleteLevel(ctx context.Context, id int64) error {
+	return s.repo.DeleteLevel(ctx, id)
 }

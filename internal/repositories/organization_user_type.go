@@ -4,7 +4,6 @@ import (
 	"context"
 
 	backend "github.com/billzayy/timesheet-management-be"
-	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/models"
 	"gorm.io/gorm"
 )
@@ -22,7 +21,7 @@ func (r *organizeRepo) CreateUserType(ctx context.Context, input models.UserType
 	return gorm.G[models.UserType](r.db).Create(ctx, &input)
 }
 
-func (r *organizeRepo) UpdateUserType(ctx context.Context, input dto.UserTypeDTO) error {
+func (r *organizeRepo) UpdateUserType(ctx context.Context, input models.UserType) error {
 	rowAffected, err := gorm.G[models.UserType](r.db).Where("id = ?", input.ID).Updates(ctx, models.UserType{
 		Name: input.Name,
 		Code: input.Code,

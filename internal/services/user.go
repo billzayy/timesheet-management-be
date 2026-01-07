@@ -7,6 +7,7 @@ import (
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/middleware"
+	"github.com/billzayy/timesheet-management-be/internal/models"
 	"github.com/billzayy/timesheet-management-be/internal/repositories"
 	"github.com/google/uuid"
 )
@@ -63,129 +64,71 @@ func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr strin
 	result := make([]dto.GetUserDTO, 0, len(rows))
 
 	for _, r := range rows {
-		result = append(result, dto.GetUserDTO{
-			FullName:              r.FullName,
-			Email:                 r.Email,
-			DOB:                   r.DOB,
-			Gender:                r.Gender,
-			Phone:                 r.Phone,
-			CurrentAddress:        r.CurrentAddress,
-			Address:               r.Address,
-			AvatarPath:            r.AvatarPath,
-			BankAccount:           *r.BankAccount,
-			IdentifyNumber:        *r.IdentifyNumber,
-			IdentifyIssueDate:     *r.IdentifyIssueDate,
-			IdentifyPlace:         *r.IdentifyPlace,
-			EmergencyContact:      r.EmergencyContact,
-			EmergencyContactPhone: r.EmergencyContactPhone,
-			TaxCode:               r.TaxCode,
-			MezonID:               r.MezonID,
-			LevelID:               r.LevelID,
-			BranchID:              r.BranchID,
-			PositionID:            r.PositionID,
-			UserTypeID:            r.UserTypeID,
-			BranchName:            *r.BranchName,
-			LevelName:             *r.LevelName,
-			PositionName:          *r.PositionName,
-			UserTypeName:          *r.UserTypeName,
-			MorningStartAt:        r.MorningStartAt,
-			MorningEndAt:          r.MorningEndAt,
-			MorningWorkingTime:    r.MorningWorkingTime,
-			AfternoonStartAt:      r.AfternoonStartAt,
-			AfternoonEndAt:        r.AfternoonEndAt,
-			AfternoonWorkingTime:  r.AfternoonWorkingTime,
-		})
+		result = append(result, convertUserReadToDTO(r))
 	}
 
 	return result, nil
 }
 
 func (s *userService) GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error) {
-	r, err := s.repo.FindByEmail(ctx, email)
+	row, err := s.repo.FindByEmail(ctx, email)
 
 	if err != nil {
 		return dto.GetUserDTO{}, err
 	}
 
-	result := dto.GetUserDTO{
-		FullName:              r.FullName,
-		Email:                 r.Email,
-		DOB:                   r.DOB,
-		Gender:                r.Gender,
-		Phone:                 r.Phone,
-		CurrentAddress:        r.CurrentAddress,
-		Address:               r.Address,
-		AvatarPath:            r.AvatarPath,
-		BankAccount:           *r.BankAccount,
-		IdentifyNumber:        *r.IdentifyNumber,
-		IdentifyIssueDate:     *r.IdentifyIssueDate,
-		IdentifyPlace:         *r.IdentifyPlace,
-		EmergencyContact:      r.EmergencyContact,
-		EmergencyContactPhone: r.EmergencyContactPhone,
-		TaxCode:               r.TaxCode,
-		MezonID:               r.MezonID,
-		LevelID:               r.LevelID,
-		BranchID:              r.BranchID,
-		PositionID:            r.PositionID,
-		UserTypeID:            r.UserTypeID,
-		BranchName:            *r.BranchName,
-		LevelName:             *r.LevelName,
-		PositionName:          *r.PositionName,
-		UserTypeName:          *r.UserTypeName,
-		MorningStartAt:        r.MorningStartAt,
-		MorningEndAt:          r.MorningEndAt,
-		MorningWorkingTime:    r.MorningWorkingTime,
-		AfternoonStartAt:      r.AfternoonStartAt,
-		AfternoonEndAt:        r.AfternoonEndAt,
-		AfternoonWorkingTime:  r.AfternoonWorkingTime,
-	}
+	result := convertUserReadToDTO(row)
 
 	return result, nil
 }
 
 func (s *userService) GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error) {
-	r, err := s.repo.FindById(ctx, id)
+	row, err := s.repo.FindById(ctx, id)
 
 	if err != nil {
 		return dto.GetUserDTO{}, err
 	}
 
-	result := dto.GetUserDTO{
-		FullName:              r.FullName,
-		Email:                 r.Email,
-		DOB:                   r.DOB,
-		Gender:                r.Gender,
-		Phone:                 r.Phone,
-		CurrentAddress:        r.CurrentAddress,
-		Address:               r.Address,
-		AvatarPath:            r.AvatarPath,
-		BankAccount:           *r.BankAccount,
-		IdentifyNumber:        *r.IdentifyNumber,
-		IdentifyIssueDate:     *r.IdentifyIssueDate,
-		IdentifyPlace:         *r.IdentifyPlace,
-		EmergencyContact:      r.EmergencyContact,
-		EmergencyContactPhone: r.EmergencyContactPhone,
-		TaxCode:               r.TaxCode,
-		MezonID:               r.MezonID,
-		LevelID:               r.LevelID,
-		BranchID:              r.BranchID,
-		PositionID:            r.PositionID,
-		UserTypeID:            r.UserTypeID,
-		BranchName:            *r.BranchName,
-		LevelName:             *r.LevelName,
-		PositionName:          *r.PositionName,
-		UserTypeName:          *r.UserTypeName,
-		MorningStartAt:        r.MorningStartAt,
-		MorningEndAt:          r.MorningEndAt,
-		MorningWorkingTime:    r.MorningWorkingTime,
-		AfternoonStartAt:      r.AfternoonStartAt,
-		AfternoonEndAt:        r.AfternoonEndAt,
-		AfternoonWorkingTime:  r.AfternoonWorkingTime,
-	}
+	result := convertUserReadToDTO(row)
 
 	return result, nil
 }
 
 func (s *userService) DeleteByEmail(ctx context.Context, email string) error {
 	return s.repo.Delete(ctx, email)
+}
+
+func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
+	return dto.GetUserDTO{
+		FullName:              r.FullName,
+		Email:                 r.Email,
+		DOB:                   r.DOB,
+		Gender:                r.Gender,
+		Phone:                 r.Phone,
+		CurrentAddress:        r.CurrentAddress,
+		Address:               r.Address,
+		AvatarPath:            r.AvatarPath,
+		BankAccount:           *r.BankAccount,
+		IdentifyNumber:        *r.IdentifyNumber,
+		IdentifyIssueDate:     *r.IdentifyIssueDate,
+		IdentifyPlace:         *r.IdentifyPlace,
+		EmergencyContact:      r.EmergencyContact,
+		EmergencyContactPhone: r.EmergencyContactPhone,
+		TaxCode:               r.TaxCode,
+		MezonID:               r.MezonID,
+		LevelID:               r.LevelID,
+		BranchID:              r.BranchID,
+		PositionID:            r.PositionID,
+		UserTypeID:            r.UserTypeID,
+		BranchName:            *r.BranchName,
+		LevelName:             *r.LevelName,
+		PositionName:          *r.PositionName,
+		UserTypeName:          *r.UserTypeName,
+		MorningStartAt:        r.MorningStartAt,
+		MorningEndAt:          r.MorningEndAt,
+		MorningWorkingTime:    r.MorningWorkingTime,
+		AfternoonStartAt:      r.AfternoonStartAt,
+		AfternoonEndAt:        r.AfternoonEndAt,
+		AfternoonWorkingTime:  r.AfternoonWorkingTime,
+	}
 }

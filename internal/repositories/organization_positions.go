@@ -4,12 +4,10 @@ import (
 	"context"
 
 	backend "github.com/billzayy/timesheet-management-be"
-	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/models"
 	"gorm.io/gorm"
 )
 
-/* Positions */
 func (r *organizeRepo) FindAllPosition(ctx context.Context, limit, offset int) ([]models.Position, error) {
 	data, err := gorm.G[models.Position](r.db).Limit(limit).Offset(offset).Find(ctx)
 	if err != nil {
@@ -23,7 +21,7 @@ func (r *organizeRepo) CreatePosition(ctx context.Context, input models.Position
 	return gorm.G[models.Position](r.db).Create(ctx, &input)
 }
 
-func (r *organizeRepo) UpdatePosition(ctx context.Context, input dto.PositionDTO) error {
+func (r *organizeRepo) UpdatePosition(ctx context.Context, input models.Position) error {
 	rowAffected, err := gorm.G[models.Position](r.db).Where("id = ?", input.ID).Updates(ctx, models.Position{
 		Name:      input.Name,
 		ShortName: input.ShortName,

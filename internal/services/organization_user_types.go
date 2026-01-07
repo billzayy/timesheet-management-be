@@ -41,7 +41,9 @@ func (s *organizeService) CreateUserType(ctx context.Context, input dto.UserType
 }
 
 func (s *organizeService) UpdateUserType(ctx context.Context, input dto.UserTypeDTO) error {
-	return s.repo.UpdateUserType(ctx, input)
+	convert := input.ToUpdateUserType()
+
+	return s.repo.UpdateUserType(ctx, convert)
 }
 
 func (s *organizeService) DeleteUserType(ctx context.Context, id int64) error {

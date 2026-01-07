@@ -1,6 +1,6 @@
 ### Get All Position
 
-GET {{BASE_URL}}/api/position/all?limit=10&offset=0 HTTP/1.1
+GET {{BASE_URL}}/api/position/all?limit=10&offset=10 HTTP/1.1
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
@@ -13,10 +13,10 @@ Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
 {
-  "code": "test 1",
+  "code": "test 2",
   "color": "#fffff",
-  "name": "Testing 1",
-  "short_name": "Test 1 Short name"
+  "name": "Testing 2",
+  "short_name": "Test 2 Short name"
 }
 
 
@@ -28,17 +28,17 @@ Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
 {
-  "code": "test",
+  "code": "test 3",
   "color": "#f1983",
-  "id": 30,
-  "name": "Testing",
-  "short_name": "Test Short name"
+  "id": 32,
+  "name": "Testing New",
+  "short_name": "Test other short name"
 }
 
 
 ### Delete Position
 
-DELETE {{BASE_URL}}/api/position/delete?id=31 HTTP/1.1
+DELETE {{BASE_URL}}/api/position/delete?id=32 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
@@ -47,7 +47,7 @@ Authorization: Bearer {{JWT_TOKEN}}
 ### Get All Level
 
 GET {{BASE_URL}}/api/level/all?limit=20&offset=0 HTTP/1.1
-Accept: application/json
+Accept: applicasion/json
 Authorization: Bearer {{JWT_TOKEN}}
 
 
@@ -59,10 +59,10 @@ Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
 {
-  "code": "test 1",
+  "code": "test",
   "color": "#fffff",
-  "display_name": "Test 1 Short name",
-  "name": "Testing 1"
+  "display_name": "Test 2 Display name",
+  "name": "Testing 2"
 }
 
 
@@ -74,17 +74,17 @@ Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
 
 {
-  "code": "test 2",
+  "code": "test 3",
   "color": "#f1983",
   "display_name": "Test Display name changed",
-  "id": 35,
-  "name": "Testing Changed"
+  "id": 37,
+  "name": "Testing 2 Changed"
 }
 
 
 ### Delete Level
 
-DELETE {{BASE_URL}}/api/level/delete?id=34 HTTP/1.1
+DELETE {{BASE_URL}}/api/level/delete?id=37 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
@@ -119,22 +119,14 @@ Authorization: Bearer {{JWT_TOKEN}}
 
 {
   "code": "test 2",
-  "id": 12,
+  "id": 13,
   "name": "Testing Changed"
 }
 
 
 ### Delete User Type
 
-DELETE {{BASE_URL}}/api/user-type/delete?id=12 HTTP/1.1
-Content-Type: application/json
-Accept: application/json
-Authorization: Bearer {{JWT_TOKEN}}
-
-
-### Get working time
-
-GET {{BASE_URL}}/api/working-time/abdeed38-642f-4435-829b-6a27a8d7f33c HTTP/1.1
+DELETE {{BASE_URL}}/api/user-type/delete?id=13 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
