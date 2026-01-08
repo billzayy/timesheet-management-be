@@ -3,9 +3,8 @@ RETURNS JSONB LANGUAGE SQL AS $$
   SELECT COALESCE(
     jsonb_agg(
       jsonb_build_object(
-        'id', c.id,
         'name', c.name,
-		'display_name', c.display_name,
+		    'display_name', c.display_name,
         'children', get_children(c.id)
       )
     ), NULL
@@ -16,7 +15,6 @@ $$;
 
 WITH RECURSIVE tree AS (
   SELECT
-    id,
     name,
     display_name,
     parent_id
@@ -25,7 +23,6 @@ WITH RECURSIVE tree AS (
 SELECT jsonb_pretty(
   jsonb_agg(
     jsonb_build_object(
-      'id', p.id,
       'name', p.name,
 	    'display_name',p.display_name,
       'children', get_children(p.id)

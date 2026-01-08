@@ -9,7 +9,6 @@ import (
 	backend "github.com/billzayy/timesheet-management-be"
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 func (s *OrganizeHandler) GetAllBranches(c *gin.Context) {
@@ -60,27 +59,7 @@ func (s *OrganizeHandler) CreateBranch(c *gin.Context) {
 		return
 	}
 
-	value, ok := c.Get("token")
-
-	if !ok {
-		errStr = backend.ErrTokenNotFound.Error()
-
-		c.JSON(http.StatusBadRequest, backend.ResponseData{
-			Result:  nil,
-			Success: false,
-			Error:   &errStr,
-		})
-		return
-	}
-
-	var id uuid.UUID
-
-	switch t := value.(type) {
-	case string:
-		id = uuid.MustParse(t)
-	default:
-		id = uuid.Nil
-	}
+	id := backend.GetTokenId(c)
 
 	if err := s.service.CreateBranch(ctx, input, id); err != nil {
 		errStr = err.Error()

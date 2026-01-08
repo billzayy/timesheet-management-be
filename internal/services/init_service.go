@@ -5,15 +5,19 @@ import (
 )
 
 type Services struct {
-	UserService     UserService
-	AuthService     AuthService
-	OrganizeService OrganizeService
+	UserService       UserService
+	AuthService       AuthService
+	OrganizeService   OrganizeService
+	PermissionService PermissionService
+	RoleService       RoleService
 }
 
 func NewServices(r *repositories.Repositories) *Services {
 	return &Services{
-		UserService:     NewUserService(r.UserRepository),
-		AuthService:     NewAuthService(r.UserRepository),
-		OrganizeService: NewOrganizeService(r.OrganizeRepository),
+		UserService:       NewUserService(r.UserRepository),
+		AuthService:       NewAuthService(r.UserRepository),
+		OrganizeService:   NewOrganizeService(r.OrganizeRepository),
+		PermissionService: NewPermissionService(r.PermissionRepository),
+		RoleService:       NewRoleService(r.RoleRepository),
 	}
 }

@@ -96,102 +96,53 @@ CREATE TABLE permissions(
 	FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO user_type (name,code,created_by)
-VALUES (
-  'Super Admin',
-  'SAD',
-  NULL
-)
-ON CONFLICT (code) DO NOTHING;
-
-INSERT INTO levels (name,display_name,code,color,created_by)
-VALUES (
-  'Administrator',
-  'Administrator',
-  'ADMIN',
-  '#FF0000',
-  NULL
-)
-ON CONFLICT (code) DO NOTHING;
-
-INSERT INTO branches (
-  name,
-  display_name,
-  code,
-  color,
-  created_by
-)
-VALUES (
-  'Head Office',
-  'Head Office',
-  'HO',
-  '#0000FF',
-  NULL
-)
-ON CONFLICT (code) DO NOTHING;
-
-INSERT INTO positions (
-  name,
-  short_name,
-  code,
-  color,
-  created_by
-)
-VALUES (
-  'Super Admin',
-  'Admin',
-  'SAD',
-  '#000000',
-  NULL
-)
-ON CONFLICT (code) DO NOTHING;
-
-INSERT INTO users (
-  sur_name,
-  last_name,
-  email,
-  dob,
-  gender,
-  phone,
-  address,
-  bank_account,
-  identify_number,
-  identify_issue_date,
-  identify_place,
-  mezon_id,
-  level_id,
-  branch_id,
-  position_id,
-  user_type_id,
-  is_active,
-  created_by
-)
-VALUES (
-  'Admin',
-  'Root',
-  'admin@company.com',
-  '1990-01-01',
-  'do not tell',
-  '0123456789',
-  'Head Office',
-  '00000000000000',
-  '123456789012',
-  '2010-01-01',
-  'Government',
-  'MEZON_SUPER_ADMIN',
-  (SELECT id FROM levels WHERE code = 'ADMIN'),
-  (SELECT id FROM branches WHERE code = 'HO'),
-  (SELECT id FROM positions WHERE code = 'SAD'),
-  (SELECT id FROM user_type WHERE code = 'SAD'),
-  TRUE,
-  NULL
+CREATE TABLE roles(
+	id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+	name varchar(200) NOT NULL UNIQUE,
+	display_name varchar(200) NOT NULL,
+	description varchar(200) not null,
+	created_by uuid NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	FOREIGN KEY(created_by) REFERENCES users(id)
 );
 
-INSERT INTO permissions (name, display_name, created_by) VALUES
-('Admin','Admin','155dd490-6528-41ba-aa16-d4ec616120fb'),
-('MyProfile','My profile','155dd490-6528-41ba-aa16-d4ec616120fb'),
-('MyTimesheet','My timesheets','155dd490-6528-41ba-aa16-d4ec616120fb'),
-('ManageTimesheet','Manage Timesheets','155dd490-6528-41ba-aa16-d4ec616120fb');
+CREATE TABLE role_permissions(
+	role_id BIGINT NOT NULL,
+	permission_id BIGINT NOT NULL,
+	created_by uuid NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	PRIMARY KEY(role_id, permission_id),
+	FOREIGN KEY (role_id) REFERENCES roles(id),
+	FOREIGN KEY (permission_id) REFERENCES permissions(id),
+	FOREIGN KEY(created_by) REFERENCES users(id)
+);
+
+INSERT INTO user_type (name,code,created_by)
+  VALUES ('Super Admin','SAD',NULL)
+  ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO levels (name,display_name,code,color,created_by)
+  VALUES ('Administrator','Administrator','ADMIN','#FF0000',NULL)
+  ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO branches (name, display_name, code, color, created_by) VALUES 
+  ('Head Office', 'Head Office', 'HO', '#0000FF', NULL) 
+  ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO positions (name, short_name, code, color, created_by) VALUES 
+  ('Super Admin', 'Admin', 'SAD', '#000000', NULL) 
+  ON CONFLICT (code) DO NOTHING;
+
+INSERT INTO users 
+  (sur_name, last_name, email, dob, gender, phone, address, bank_account, identify_number, identify_issue_date, identify_place, mezon_id, 
+  level_id, branch_id, position_id, user_type_id, 
+  is_active, created_by) VALUES 
+  ('Admin', 'Root', 'admin@company.com', '1990-01-01', 'do not tell', '0123456789', 'Head Office', '00000000000000', '123456789012', '2010-01-01', 'Government', 'MEZON_SUPER_ADMIN', 
+  (SELECT id FROM levels WHERE code = 'ADMIN'), 
+  (SELECT id FROM branches WHERE code = 'HO'), 
+  (SELECT id FROM positions WHERE code = 'SAD'), 
+  (SELECT id FROM user_type WHERE code = 'SAD'), 
+  TRUE, NULL);
 
 ALTER TABLE users
 ADD COLUMN level_id BIGINT NOT NULL,
