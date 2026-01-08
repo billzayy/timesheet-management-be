@@ -11,20 +11,22 @@ import (
 
 type RoleService interface {
 	GetList(ctx context.Context, limit, offset int) ([]dto.RoleDTO, error)
+	GetRoleById(ctx context.Context, id int64) (dto.RolePermissionDTO, error)
 	CreateRole(ctx context.Context, input dto.RoleDTO, id uuid.UUID) error
 	DeleteRole(ctx context.Context, id int64) error
 }
 
 type roleService struct {
-	repo repositories.RoleRepository
+	roleRepo       repositories.RoleRepository
+	permissionRepo repositories.PermissionRepository
 }
 
-func NewRoleService(repo repositories.RoleRepository) RoleService {
-	return &roleService{repo: repo}
+func NewRoleService(roleRep repositories.RoleRepository, perRep repositories.PermissionRepository) RoleService {
+	return &roleService{roleRepo: roleRep, permissionRepo: perRep}
 }
 
 func (s *roleService) GetList(ctx context.Context, limit, offset int) ([]dto.RoleDTO, error) {
-	data, err := s.repo.FindAll(ctx, limit, offset)
+	data, err := s.roleRepo.FindAll(ctx, limit, offset)
 
 	if err != nil {
 		return nil, err
@@ -44,6 +46,27 @@ func (s *roleService) GetList(ctx context.Context, limit, offset int) ([]dto.Rol
 	return result, nil
 }
 
+func (s *roleService) GetRoleById(ctx context.Context, id int64) (dto.RolePermissionDTO, error) {
+	roleData, err := s.roleRepo.FindRoleById(ctx, id)
+
+	if err != nil {
+		return dto.RolePermissionDTO{}, err
+	}
+
+	permissionData, err := s.permissionRepo.FindPermissionWithRoleId(id)
+
+	if err != nil {
+		return dto.RolePermissionDTO{}, err
+	}
+
+	return dto.RolePermissionDTO{
+		Name:        roleData.Name,
+		DisplayName: roleData.DisplayName,
+		Description: roleData.Description,
+		Permissions: permissionData,
+	}, nil
+}
+
 func (s *roleService) CreateRole(ctx context.Context, input dto.RoleDTO, id uuid.UUID) error {
 	convert := models.Role{
 		Name:        input.Name,
@@ -52,9 +75,9 @@ func (s *roleService) CreateRole(ctx context.Context, input dto.RoleDTO, id uuid
 		CreatedBy:   id,
 	}
 
-	return s.repo.Create(ctx, convert)
+	return s.roleRepo.Create(ctx, convert)
 }
 
 func (s *roleService) DeleteRole(ctx context.Context, id int64) error {
-	return s.repo.Delete(ctx, id)
+	return s.roleRepo.Delete(ctx, id)
 }

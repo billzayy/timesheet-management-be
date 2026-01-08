@@ -49,6 +49,44 @@ func (h *RoleHandler) GetListRole(c *gin.Context) {
 	})
 }
 
+func (h *RoleHandler) GetRoleById(c *gin.Context) {
+	ctx := context.Background()
+
+	var errStr string
+
+	id, err := strconv.Atoi(c.Query("id"))
+
+	if err != nil {
+		errStr = err.Error()
+
+		c.JSON(http.StatusBadRequest, backend.ResponseData{
+			Result:  nil,
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	data, err := h.service.GetRoleById(ctx, int64(id))
+
+	if err != nil {
+		errStr = err.Error()
+
+		c.JSON(http.StatusInternalServerError, backend.ResponseData{
+			Result:  nil,
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, backend.ResponseData{
+		Result:  data,
+		Success: true,
+		Error:   nil,
+	})
+}
+
 func (h *RoleHandler) CreateRole(c *gin.Context) {
 	ctx := context.Background()
 	var errStr string

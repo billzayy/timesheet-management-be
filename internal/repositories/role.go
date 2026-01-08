@@ -10,6 +10,7 @@ import (
 
 type RoleRepository interface {
 	FindAll(ctx context.Context, limit, offset int) ([]models.Role, error)
+	FindRoleById(ctx context.Context, id int64) (models.Role, error)
 	Create(ctx context.Context, input models.Role) error
 	Delete(ctx context.Context, id int64) error
 }
@@ -27,6 +28,10 @@ func (r *roleRepo) FindAll(ctx context.Context, limit, offset int) ([]models.Rol
 		Limit(limit).Offset(offset).
 		Order("name ASC").
 		Find(ctx)
+}
+
+func (r *roleRepo) FindRoleById(ctx context.Context, id int64) (models.Role, error) {
+	return gorm.G[models.Role](r.db).Where("id = ?", id).First(ctx)
 }
 
 func (r *roleRepo) Create(ctx context.Context, input models.Role) error {

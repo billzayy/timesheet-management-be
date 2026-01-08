@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/billzayy/timesheet-management-be/internal/models"
 	"gorm.io/gorm"
@@ -9,6 +10,7 @@ import (
 
 type PermissionRepository interface {
 	FindAllPermissions() ([]models.PermissionNode, error)
+	FindPermissionWithRoleId(id int64) ([]models.PermissionNode, error)
 }
 
 type permissionRepo struct {
@@ -34,6 +36,36 @@ func (r *permissionRepo) FindAllPermissions() ([]models.PermissionNode, error) {
 		FROM permissions p
 		WHERE parent_id IS NULL;
 	`).Row().Scan(&raw)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if err := json.Unmarshal(raw, &result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
+func (r *permissionRepo) FindPermissionWithRoleId(id int64) ([]models.PermissionNode, error) {
+	var raw []byte
+	var result []models.PermissionNode
+
+	query := fmt.Sprintf(`
+		SELECT jsonb_agg(
+			jsonb_build_object(
+    	'name', p.name,
+    	'display_name', p.display_name,
+    	'children', get_children(p.id)
+  		)
+		)
+		FROM permissions p
+		INNER JOIN role_permissions rp ON rp.permission_id = p.id
+		WHERE parent_id IS NULL AND rp.role_id=?;
+		`)
+
+	err := r.db.Raw(query, id).Row().Scan(&raw)
 
 	if err != nil {
 		return nil, err
