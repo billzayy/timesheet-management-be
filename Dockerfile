@@ -36,8 +36,8 @@ RUN mkdir -p /root/internal
 # Copy built binary from builder to a specific file path
 COPY --from=builder /app /root/
 
-# Copy .env file
-COPY ./.env /root/.env
+# # Copy .env file
+# COPY ./.env /root/.env
 
 # Expose port defined by REST_PORT environment variable
 EXPOSE $REST_PORT

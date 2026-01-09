@@ -1,2 +1,6 @@
 migrations/pgdata
-pgdata
+.env
+.env.*
+.rest.env
+./internal/http/*
+.git

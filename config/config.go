@@ -1,6 +1,7 @@
 package config
 
 import (
+	"log"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -15,10 +16,16 @@ type Config struct {
 }
 
 func Load() (*Config, error) {
-	err := godotenv.Load(".env")
+	appEnv := os.Getenv("APP_ENV")
 
-	if err != nil {
-		return &Config{}, err
+	switch appEnv {
+	case "local":
+		_ = godotenv.Load(".env.local")
+	case "production":
+		// DO NOT load .env in prod
+		log.Println("Running in production, using system env / secrets")
+	default:
+		_ = godotenv.Load(".env")
 	}
 
 	return &Config{
