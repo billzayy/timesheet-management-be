@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/billzayy/timesheet-management-be/config"
 	"github.com/billzayy/timesheet-management-be/database"
@@ -21,11 +22,15 @@ func main() {
 	}
 
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable timezone=Asia/Shanghai",
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable timezone=UTC",
 		cfg.DBHost, cfg.DBUser, cfg.DBPass, cfg.DBName, cfg.DBPort,
 	)
 
-	db := database.Connect(dsn)
+	db, err := database.Connect(dsn)
+
+	if err != nil {
+		log.Fatal("❌ failed to connect database:", err)
+	}
 
 	handler := handlers.NewHandlers(
 		services.NewServices(
@@ -36,5 +41,5 @@ func main() {
 	r := gin.Default()
 	routes.Register(r, handler)
 
-	r.Run(":8080")
+	r.Run(":" + os.Getenv("REST_PORT"))
 }

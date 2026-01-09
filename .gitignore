@@ -3,3 +3,4 @@ go.sum
 migrations/*.up.sql
 migrations/*.down.sql
 .env
+.rest.env
