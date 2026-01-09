@@ -66,7 +66,8 @@ SELECT
             FILTER (WHERE wt.shift_name = 'afternoon')
         )::numeric,
         1
-    ) AS afternoon_working_time
+    ) AS afternoon_working_time,
+    b.color AS branch_color
 
 FROM users u
 LEFT JOIN branches   b  ON b.id  = u.branch_id
@@ -80,6 +81,7 @@ LEFT JOIN working_times wt
 GROUP BY
     u.id,
     b.name,
+    b.color,
     l.name,
     p.name,
     ut.name;

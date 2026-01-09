@@ -11,6 +11,7 @@ import (
 type PermissionRepository interface {
 	FindAllPermissions() ([]models.PermissionNode, error)
 	FindPermissionWithRoleId(id int64) ([]models.PermissionNode, error)
+	FindGrantedPermission(id int64) ([]string, error)
 }
 
 type permissionRepo struct {
@@ -76,4 +77,21 @@ func (r *permissionRepo) FindPermissionWithRoleId(id int64) ([]models.Permission
 	}
 
 	return result, nil
+}
+
+func (r *permissionRepo) FindGrantedPermission(id int64) ([]string, error) {
+	var names []string
+
+	err := r.db.
+		Table("permissions p").
+		Select("p.name").
+		Joins("INNER JOIN role_permissions rp ON rp.permission_id = p.id").
+		Where("rp.role_id = ?", id).
+		Scan(&names).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	return names, nil
 }

@@ -1,6 +1,8 @@
 package dto
 
-import "github.com/billzayy/timesheet-management-be/internal/models"
+import (
+	"github.com/billzayy/timesheet-management-be/internal/models"
+)
 
 type RoleDTO struct {
 	ID          int64  `json:"id"`
@@ -15,4 +17,8 @@ type RolePermissionDTO struct {
 	Description string `json:"description"`
 
 	Permissions []models.PermissionNode `json:"permissions"`
+
+	GrantedPermissions []string `json:"grantedPermissionNames"`
+
+	Users []RoleUserDTO `json:"users"`
 }

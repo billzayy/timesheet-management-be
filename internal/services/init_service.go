@@ -18,6 +18,6 @@ func NewServices(r *repositories.Repositories) *Services {
 		AuthService:       NewAuthService(r.UserRepository),
 		OrganizeService:   NewOrganizeService(r.OrganizeRepository),
 		PermissionService: NewPermissionService(r.PermissionRepository),
-		RoleService:       NewRoleService(r.RoleRepository, r.PermissionRepository),
+		RoleService:       NewRoleService(r.RoleRepository, r.PermissionRepository, r.UserRepository),
 	}
 }

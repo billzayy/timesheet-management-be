@@ -72,6 +72,7 @@ type UserRead struct {
 	AfternoonStartAt     string  `json:"afternoon_start_at"`
 	AfternoonEndAt       string  `json:"afternoon_end_at"`
 	AfternoonWorkingTime float64 `json:"afternoon_working_time"`
+	BranchColor          string  `json:"branch_color"`
 }
 
 func (User) TableName() string {

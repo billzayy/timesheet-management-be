@@ -72,6 +72,24 @@ type GetUserDTO struct {
 	ID                    uuid.UUID `json:"id"`
 }
 
+type RoleUserDTO struct {
+	UserID     uuid.UUID
+	FullName   string
+	Email      string
+	AvatarPath *string
+
+	LevelID    int64
+	BranchID   int64
+	PositionID int64
+	UserTypeID int64
+
+	BranchName   *string
+	BranchColor  *string
+	LevelName    *string
+	PositionName *string
+	UserTypeName *string
+}
+
 func (dto RequestUserDTO) ToUser() models.User {
 	return models.User{
 		SurName:               dto.SurName,

@@ -16,6 +16,7 @@ type UserRepository interface {
 	FindAll(ctx context.Context, limit, offset int) ([]models.UserRead, error)
 	FindByEmail(ctx context.Context, email string) (models.UserRead, error)
 	FindById(ctx context.Context, id uuid.UUID) (models.UserRead, error)
+	FindByRoleId(ctx context.Context, id int64) ([]models.UserRead, error)
 	Delete(ctx context.Context, id uuid.UUID) error
 	CheckEmailAndPassword(ctx context.Context, email string) (*models.User, error)
 }
@@ -99,6 +100,18 @@ func (r *userRepo) FindById(ctx context.Context, id uuid.UUID) (models.UserRead,
 	if result.Email == "" {
 		return result, backend.ErrUserNotFound
 	}
+
+	return result, err
+}
+
+func (r *userRepo) FindByRoleId(ctx context.Context, id int64) ([]models.UserRead, error) {
+	var result []models.UserRead
+
+	err := r.db.WithContext(ctx).
+		Table("user_daily_summary_v sv").
+		Joins("LEFT JOIN user_role ur ON ur.user_id = sv.user_id").
+		Where("ur.role_id= ?", id).
+		Find(&result).Error
 
 	return result, err
 }

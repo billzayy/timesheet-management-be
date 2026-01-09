@@ -16,7 +16,7 @@ Authorization: Bearer {{JWT_TOKEN}}
 
 ### Get Role with Permission by Id
 
-GET {{BASE_URL}}/api/role?id=1 HTTP/1.1
+GET {{BASE_URL}}/api/role?id=4 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}

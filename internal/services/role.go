@@ -19,10 +19,17 @@ type RoleService interface {
 type roleService struct {
 	roleRepo       repositories.RoleRepository
 	permissionRepo repositories.PermissionRepository
+	userRepo       repositories.UserRepository
 }
 
-func NewRoleService(roleRep repositories.RoleRepository, perRep repositories.PermissionRepository) RoleService {
-	return &roleService{roleRepo: roleRep, permissionRepo: perRep}
+func NewRoleService(
+	roleRep repositories.RoleRepository,
+	perRep repositories.PermissionRepository,
+	userRep repositories.UserRepository) RoleService {
+	return &roleService{
+		roleRepo:       roleRep,
+		permissionRepo: perRep,
+		userRepo:       userRep}
 }
 
 func (s *roleService) GetList(ctx context.Context, limit, offset int) ([]dto.RoleDTO, error) {
@@ -53,17 +60,33 @@ func (s *roleService) GetRoleById(ctx context.Context, id int64) (dto.RolePermis
 		return dto.RolePermissionDTO{}, err
 	}
 
-	permissionData, err := s.permissionRepo.FindPermissionWithRoleId(id)
+	permissionDatas, err := s.permissionRepo.FindAllPermissions()
 
 	if err != nil {
 		return dto.RolePermissionDTO{}, err
 	}
 
+	grantedNames, err := s.permissionRepo.FindGrantedPermission(id)
+
+	if err != nil {
+		return dto.RolePermissionDTO{}, err
+	}
+
+	userDatas, err := s.userRepo.FindByRoleId(ctx, 1)
+
+	if err != nil {
+		return dto.RolePermissionDTO{}, err
+	}
+
+	userList := converUserDTO(userDatas)
+
 	return dto.RolePermissionDTO{
-		Name:        roleData.Name,
-		DisplayName: roleData.DisplayName,
-		Description: roleData.Description,
-		Permissions: permissionData,
+		Name:               roleData.Name,
+		DisplayName:        roleData.DisplayName,
+		Description:        roleData.Description,
+		Permissions:        permissionDatas,
+		GrantedPermissions: grantedNames,
+		Users:              userList,
 	}, nil
 }
 
@@ -80,4 +103,29 @@ func (s *roleService) CreateRole(ctx context.Context, input dto.RoleDTO, id uuid
 
 func (s *roleService) DeleteRole(ctx context.Context, id int64) error {
 	return s.roleRepo.Delete(ctx, id)
+}
+
+func converUserDTO(input []models.UserRead) []dto.RoleUserDTO {
+	result := make([]dto.RoleUserDTO, 0, len(input))
+
+	for _, m := range input {
+		result = append(result,
+			dto.RoleUserDTO{
+				FullName:   m.FullName,
+				Email:      m.Email,
+				AvatarPath: m.AvatarPath,
+				LevelID:    m.LevelID,
+				LevelName:  m.LevelName,
+				BranchID:   m.BranchID,
+				BranchName: m.LevelName,
+				// BranchColor:  m.BranchColor,
+				PositionID:   m.PositionID,
+				PositionName: m.PositionName,
+				UserTypeID:   m.UserTypeID,
+				UserTypeName: m.UserTypeName,
+				UserID:       m.UserID,
+			})
+	}
+
+	return result
 }

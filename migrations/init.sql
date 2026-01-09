@@ -117,6 +117,17 @@ CREATE TABLE role_permissions(
 	FOREIGN KEY(created_by) REFERENCES users(id)
 );
 
+CREATE TABLE user_role(
+	user_id uuid NOT NULL,
+	role_id BIGINT NOT NULL,
+	created_by uuid NOT NULL,
+	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+	PRIMARY KEY(role_id, user_id),
+	FOREIGN KEY (role_id) REFERENCES roles(id),
+	FOREIGN KEY (user_id) REFERENCES users(id),
+	FOREIGN KEY(created_by) REFERENCES users(id)
+);
+
 INSERT INTO user_type (name,code,created_by)
   VALUES ('Super Admin','SAD',NULL)
   ON CONFLICT (code) DO NOTHING;
