@@ -1,0 +1,17 @@
+# version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_USER: tuanphanle
+      POSTGRES_PASSWORD: 20102002
+      POSTGRES_DB: timsheet_management # You can create a default DB this way
+    ports:
+      - "5591:5432"
+    volumes:
+      - ./migrations:/docker-entrypoint-initdb.d
+      - ./migrations/pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:

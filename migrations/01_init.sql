@@ -1,6 +1,6 @@
 CREATE TYPE genderType AS ENUM ('male', 'female', 'do not tell');
 CREATE TYPE entityType AS ENUM('user', 'branch');
-CREATE TYPE shiftType AS ENUM('morning', 'afternoon')
+CREATE TYPE shiftType AS ENUM('morning', 'afternoon');
 
 CREATE TABLE Users(
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -23,7 +23,7 @@ CREATE TABLE Users(
   is_active BOOLEAN NOT NULL DEFAULT(false),
   mezon_id VARCHAR(255) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid REFERENCES Users(id),
+  created_by uuid,
   FOREIGN KEY (created_by) REFERENCES Users(id)
 );
 
@@ -34,7 +34,7 @@ CREATE TABLE Levels(
   code VARCHAR(10) NOT NULL UNIQUE,
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid NOT NULL,
+  created_by uuid NULL,
   FOREIGN KEY(created_by) REFERENCES Users(id)
 );
 
@@ -45,8 +45,8 @@ CREATE TABLE Branches(
   code VARCHAR(10) NOT NULL UNIQUE,
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid NOT NULL,
-  uuid UUID DEFAULT gen_random_uuid() NOT NULL;
+  created_by uuid NULL,
+  uuid UUID DEFAULT gen_random_uuid() NOT NULL,
   FOREIGN KEY(created_by) REFERENCES Users(id)
 );
 
@@ -57,7 +57,7 @@ CREATE TABLE Positions(
   code VARCHAR(10) NOT NULL UNIQUE,
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid NOT NULL,
+  created_by uuid NULL,
   FOREIGN KEY(created_by) REFERENCES Users(id)
 );
 
@@ -66,7 +66,7 @@ CREATE TABLE User_Type(
   name VARCHAR(255) NOT NULL UNIQUE,
   code VARCHAR(10) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid NOT NULL,
+  created_by uuid NULL,
   FOREIGN KEY(created_by) REFERENCES Users(id)
 );
 
@@ -128,6 +128,18 @@ CREATE TABLE user_role(
 	FOREIGN KEY(created_by) REFERENCES users(id)
 );
 
+ALTER TABLE users
+ADD COLUMN level_id BIGINT NOT NULL,
+ADD COLUMN branch_id BIGINT NOT NULL,
+ADD COLUMN position_id BIGINT NOT NULL,
+ADD COLUMN user_type_id BIGINT NOT NULL;
+
+ALTER TABLE users
+ADD CONSTRAINT fk_level FOREIGN KEY (level_id) REFERENCES levels(id),
+ADD CONSTRAINT fk_branch FOREIGN KEY (branch_id) REFERENCES branches(id),
+ADD CONSTRAINT fk_position FOREIGN KEY (position_id) REFERENCES positions(id),
+ADD CONSTRAINT fk_user_type FOREIGN KEY (user_type_id) REFERENCES user_Type(id);
+
 INSERT INTO user_type (name,code,created_by)
   VALUES ('Super Admin','SAD',NULL)
   ON CONFLICT (code) DO NOTHING;
@@ -155,14 +167,3 @@ INSERT INTO users
   (SELECT id FROM user_type WHERE code = 'SAD'), 
   TRUE, NULL);
 
-ALTER TABLE users
-ADD COLUMN level_id BIGINT NOT NULL,
-ADD COLUMN branch_id BIGINT NOT NULL,
-ADD COLUMN position_id BIGINT NOT NULL,
-ADD COLUMN user_type_id BIGINT NOT NULL;
-
-ALTER TABLE users
-ADD CONSTRAINT fk_level FOREIGN KEY (level_id) REFERENCES levels(id),
-ADD CONSTRAINT fk_branch FOREIGN KEY (branch_id) REFERENCES branches(id),
-ADD CONSTRAINT fk_position FOREIGN KEY (position_id) REFERENCES positions(id),
-ADD CONSTRAINT fk_user_type FOREIGN KEY (user_type_id) REFERENCES user_Type(id);
