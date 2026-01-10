@@ -18,6 +18,16 @@ func NewAuthHandler(s services.AuthService) *AuthHandler {
 	return &AuthHandler{s}
 }
 
+// Login godoc
+//
+//	@Summary		Login
+//	@Description	Login Timesheet
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.LoginDTO	true	"Send Login Information"
+//	@Success		200		{object}	backend.ResponseData
+//	@Router			/auth/login [post]
 func (h *AuthHandler) Login(c *gin.Context) {
 	ctx := context.Background()
 	c.Header("Content-Type", "application/json")

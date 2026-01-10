@@ -1,0 +1,848 @@
+definitions:
+  backend.ResponseData:
+    properties:
+      error:
+        type: string
+      result: {}
+      success:
+        type: boolean
+    type: object
+  dto.BranchDTO:
+    properties:
+      afternoon_end_at:
+        type: string
+      afternoon_start_at:
+        type: string
+      afternoon_working_time:
+        type: number
+      code:
+        type: string
+      color:
+        type: string
+      display_name:
+        type: string
+      id:
+        type: integer
+      morning_end_at:
+        type: string
+      morning_start_at:
+        type: string
+      morning_working_time:
+        type: number
+      name:
+        type: string
+    required:
+    - code
+    - color
+    - display_name
+    - name
+    type: object
+  dto.LevelDTO:
+    properties:
+      code:
+        type: string
+      color:
+        type: string
+      display_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - code
+    - color
+    - display_name
+    - name
+    type: object
+  dto.LoginDTO:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  dto.PositionDTO:
+    properties:
+      code:
+        type: string
+      color:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      short_name:
+        type: string
+    required:
+    - code
+    - color
+    - name
+    - short_name
+    type: object
+  dto.RequestUserDTO:
+    properties:
+      address:
+        type: string
+      afternoon_end_at:
+        type: string
+      afternoon_start_at:
+        type: string
+      afternoon_working_time:
+        type: number
+      avatar_path:
+        type: string
+      bank_account:
+        type: string
+      branch_id:
+        type: integer
+      current_address:
+        type: string
+      dob:
+        type: string
+      email:
+        type: string
+      emergency_contact:
+        type: string
+      emergency_contact_phone:
+        type: string
+      gender:
+        type: string
+      identify_issue_date:
+        type: string
+      identify_number:
+        type: string
+      identify_place:
+        type: string
+      last_name:
+        maxLength: 100
+        type: string
+      level_id:
+        type: integer
+      mezon_id:
+        type: string
+      morning_end_at:
+        type: string
+      morning_start_at:
+        type: string
+      morning_working_time:
+        type: number
+      password:
+        type: string
+      phone:
+        type: string
+      position_id:
+        type: integer
+      sur_name:
+        maxLength: 100
+        type: string
+      tax_code:
+        type: string
+      user_type_id:
+        type: integer
+    required:
+    - address
+    - bank_account
+    - branch_id
+    - dob
+    - email
+    - identify_issue_date
+    - identify_number
+    - identify_place
+    - last_name
+    - level_id
+    - mezon_id
+    - password
+    - phone
+    - position_id
+    - sur_name
+    - user_type_id
+    type: object
+  dto.RoleDTO:
+    properties:
+      description:
+        type: string
+      display_name:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - display_name
+    - name
+    type: object
+  dto.UserTypeDTO:
+    properties:
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - code
+    - name
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login Timesheet
+      parameters:
+      - description: Send Login Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Login
+      tags:
+      - auth
+  /branch/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All Branches Information
+      parameters:
+      - description: Limit pagination
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get All Branches
+      tags:
+      - organization
+  /branch/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Branch
+      parameters:
+      - description: Create Branch Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BranchDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Create Branch
+      tags:
+      - organization
+  /branch/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Branch
+      parameters:
+      - description: Branch Id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete Branch
+      tags:
+      - organization
+  /branch/update:
+    put:
+      consumes:
+      - application/json
+      description: Update Branch Information
+      parameters:
+      - description: Update Branch Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.BranchDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Update Branch
+      tags:
+      - organization
+  /level/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All Levels Information
+      parameters:
+      - description: Limit pagination
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get All Levels
+      tags:
+      - organization
+  /level/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Level
+      parameters:
+      - description: Create Level Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LevelDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Create Level
+      tags:
+      - organization
+  /level/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Level
+      parameters:
+      - description: Delete Level Information
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete Level
+      tags:
+      - organization
+  /level/update:
+    put:
+      consumes:
+      - application/json
+      description: Update Level
+      parameters:
+      - description: Create Level Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LevelDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Update Level
+      tags:
+      - organization
+  /permission/all:
+    get:
+      consumes:
+      - application/json
+      description: Get List Permission
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Get List Permission
+      tags:
+      - role
+  /position/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All Positions Information
+      parameters:
+      - description: Limit pagination
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get All Positions
+      tags:
+      - organization
+  /position/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Position Information
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PositionDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Create Position
+      tags:
+      - organization
+  /position/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Position Information
+      parameters:
+      - description: Position Id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete Position
+      tags:
+      - organization
+  /position/update:
+    put:
+      consumes:
+      - application/json
+      description: Update Position Information
+      parameters:
+      - description: Request Body
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PositionDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Update Position
+      tags:
+      - organization
+  /role:
+    get:
+      consumes:
+      - application/json
+      description: Get Role Id Information
+      parameters:
+      - description: Role Id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Get Role Id
+      tags:
+      - role
+  /role/all:
+    get:
+      consumes:
+      - application/json
+      description: Get List Role Information
+      parameters:
+      - description: Limit pagination
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Get List Role
+      tags:
+      - role
+  /role/create:
+    post:
+      consumes:
+      - application/json
+      description: Create Role
+      parameters:
+      - description: Create Role Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RoleDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Create Role
+      tags:
+      - organization
+  /role/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Role
+      parameters:
+      - description: Delete Role Information
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete Role
+      tags:
+      - organization
+  /user-type/all:
+    get:
+      consumes:
+      - application/json
+      description: Get All User Types Information
+      parameters:
+      - description: Limit pagination
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get All User Types
+      tags:
+      - organization
+  /user-type/create:
+    post:
+      consumes:
+      - application/json
+      description: Create User Types Information
+      parameters:
+      - description: UserType Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserTypeDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Create User Types
+      tags:
+      - organization
+  /user-type/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User Types Information
+      parameters:
+      - description: UserType Id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete User Types
+      tags:
+      - organization
+  /user-type/update:
+    put:
+      consumes:
+      - application/json
+      description: Update User Types Information
+      parameters:
+      - description: UserType Information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserTypeDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Update User Types
+      tags:
+      - organization
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get User Information By Id
+      parameters:
+      - description: Id User
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get User By Id
+      tags:
+      - user
+  /user/all:
+    get:
+      consumes:
+      - application/json
+      description: Gett All Users Information
+      parameters:
+      - description: Limit Get
+        in: query
+        name: limit
+        required: true
+        type: string
+      - description: Offset for pagination
+        in: query
+        name: offset
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get All
+      tags:
+      - user
+  /user/by-email:
+    get:
+      consumes:
+      - application/json
+      description: Gett User Information By Email
+      parameters:
+      - description: Email User
+        in: query
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get User By Email
+      tags:
+      - user
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: Create User Information
+      parameters:
+      - description: Send Request Create User
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RequestUserDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Create User
+      tags:
+      - user
+  /user/delete:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User Information By Id
+      parameters:
+      - description: Id User
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete User By Id
+      tags:
+      - user
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

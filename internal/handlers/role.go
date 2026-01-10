@@ -19,6 +19,17 @@ func NewRoleHandler(s services.RoleService) *RoleHandler {
 	return &RoleHandler{s}
 }
 
+// Get List Role godoc
+//
+//	@Summary		Get List Role
+//	@Description	Get List Role Information
+//	@Tags			role
+//	@Accept			json
+//	@Produce		json
+//	@Param			limit	query		string	true	"Limit pagination"
+//	@Param			offset	query		string	true	"Offset pagination"
+//	@Success		200		{object}	backend.ResponseData
+//	@Router			/role/all [get]
 func (h *RoleHandler) GetListRole(c *gin.Context) {
 	ctx := context.Background()
 	var errStr string
@@ -49,6 +60,16 @@ func (h *RoleHandler) GetListRole(c *gin.Context) {
 	})
 }
 
+// Get Role Id godoc
+//
+//	@Summary		Get Role Id
+//	@Description	Get Role Id Information
+//	@Tags			role
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query		string	true	"Role Id"
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/role [get]
 func (h *RoleHandler) GetRoleById(c *gin.Context) {
 	ctx := context.Background()
 
@@ -87,6 +108,17 @@ func (h *RoleHandler) GetRoleById(c *gin.Context) {
 	})
 }
 
+// Create Role godoc
+//
+//	@Summary		Create Role
+//	@Description	Create Role
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.RoleDTO	true	"Create Role Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/role/create [post]
 func (h *RoleHandler) CreateRole(c *gin.Context) {
 	ctx := context.Background()
 	var errStr string
@@ -124,6 +156,17 @@ func (h *RoleHandler) CreateRole(c *gin.Context) {
 	})
 }
 
+// Delete Role godoc
+//
+//	@Summary		Delete Role
+//	@Description	Delete Role
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query	string	true	"Delete Role Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/role/delete [delete]
 func (h *RoleHandler) DeleteRole(c *gin.Context) {
 	ctx := context.Background()
 	var errStr string

@@ -27,7 +27,7 @@ services:
       - "${POSTGRES_PORT:-5591}:5432"
     volumes:
       - ./migrations:/docker-entrypoint-initdb.d
-      - ./migrations/pgdata:/var/lib/postgresql/data
+      - ../pgdata:/var/lib/postgresql/data
     networks:
       - app-network
 

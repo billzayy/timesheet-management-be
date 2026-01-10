@@ -11,6 +11,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Gett All Branches godoc
+//
+//	@Summary		Get All Branches
+//	@Description	Get All Branches Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			limit	query	string	true	"Limit pagination"
+//	@Param			offset	query	string	true	"Offset pagination"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/branch/all [get]
 func (s *OrganizeHandler) GetAllBranches(c *gin.Context) {
 	ctx := context.Background()
 
@@ -41,6 +53,17 @@ func (s *OrganizeHandler) GetAllBranches(c *gin.Context) {
 	})
 }
 
+// Create Branch godoc
+//
+//	@Summary		Create Branch
+//	@Description	Create Branch
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.BranchDTO	true	"Create Branch Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/branch/create [post]
 func (s *OrganizeHandler) CreateBranch(c *gin.Context) {
 	ctx := context.Background()
 
@@ -79,6 +102,17 @@ func (s *OrganizeHandler) CreateBranch(c *gin.Context) {
 	})
 }
 
+// Update Branch godoc
+//
+//	@Summary		Update Branch
+//	@Description	Update Branch Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.BranchDTO	true	"Update Branch Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/branch/update [put]
 func (s *OrganizeHandler) UpdateBranch(c *gin.Context) {
 	ctx := context.Background()
 
@@ -123,6 +157,17 @@ func (s *OrganizeHandler) UpdateBranch(c *gin.Context) {
 	})
 }
 
+// Delete Branch godoc
+//
+//	@Summary		Delete Branch
+//	@Description	Delete Branch
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query	string	true	"Branch Id"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/branch/delete [delete]
 func (s *OrganizeHandler) DeleteBranch(c *gin.Context) {
 	ctx := context.Background()
 

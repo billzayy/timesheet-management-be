@@ -11,6 +11,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Get All User Types godoc
+//
+//	@Summary		Get All User Types
+//	@Description	Get All User Types Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			limit	query	string	true	"Limit pagination"
+//	@Param			offset	query	string	true	"Offset pagination"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user-type/all [get]
 func (s *OrganizeHandler) GetAllUserTypes(c *gin.Context) {
 	ctx := context.Background()
 
@@ -41,6 +53,17 @@ func (s *OrganizeHandler) GetAllUserTypes(c *gin.Context) {
 	})
 }
 
+// Create User Types godoc
+//
+//	@Summary		Create User Types
+//	@Description	Create User Types Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.UserTypeDTO	true	"UserType Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user-type/create [post]
 func (s *OrganizeHandler) CreateUserType(c *gin.Context) {
 	ctx := context.Background()
 
@@ -79,6 +102,17 @@ func (s *OrganizeHandler) CreateUserType(c *gin.Context) {
 	})
 }
 
+// Update User Types godoc
+//
+//	@Summary		Update User Types
+//	@Description	Update User Types Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.UserTypeDTO	true	"UserType Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user-type/update [put]
 func (s *OrganizeHandler) UpdateUserType(c *gin.Context) {
 	ctx := context.Background()
 
@@ -123,6 +157,17 @@ func (s *OrganizeHandler) UpdateUserType(c *gin.Context) {
 	})
 }
 
+// Delete User Types godoc
+//
+//	@Summary		Delete User Types
+//	@Description	Delete User Types Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query	string	true	"UserType Id"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user-type/delete [delete]
 func (s *OrganizeHandler) DeleteUserType(c *gin.Context) {
 	ctx := context.Background()
 

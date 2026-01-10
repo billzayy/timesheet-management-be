@@ -16,6 +16,15 @@ func NewPermissionHandler(s services.PermissionService) *PermissionHandler {
 	return &PermissionHandler{s}
 }
 
+// Get List Permission godoc
+//
+//	@Summary		Get List Permission
+//	@Description	Get List Permission
+//	@Tags			role
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/permission/all [get]
 func (h *PermissionHandler) GetListPermission(c *gin.Context) {
 	var errStr string
 

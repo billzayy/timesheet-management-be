@@ -13,10 +13,16 @@ import (
 	"github.com/billzayy/timesheet-management-be/internal/routes"
 	"github.com/billzayy/timesheet-management-be/internal/services"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 
+	"github.com/billzayy/timesheet-management-be/docs"
 	"github.com/gin-contrib/cors"
 )
 
+// @securityDefinitions.apikey	BearerAuth
+// @in							header
+// @name						Authorization
 func main() {
 	cfg, err := config.Load()
 
@@ -45,19 +51,28 @@ func main() {
 		),
 	)
 
+	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Version = "2.0"
+	docs.SwaggerInfo.Description = "This is a sample server."
+	docs.SwaggerInfo.Host = "localhost:" + os.Getenv("REST_PORT")
+	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"},                   // Allowed origins
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Allowed HTTP methods
-		AllowHeaders:     []string{"Content-Type", "Authorization"},           // Allowed headers
-		ExposeHeaders:    []string{"Content-Length"},                          // Exposed headers
-		AllowCredentials: true,                                                // Allow credentials (cookies)
-		MaxAge:           12 * time.Hour,                                      // Cache duration for preflight requests
+		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:3001"}, // Allowed origins
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},        // Allowed HTTP methods
+		AllowHeaders:     []string{"Content-Type", "Authorization"},                  // Allowed headers
+		ExposeHeaders:    []string{"Content-Length"},                                 // Exposed headers
+		AllowCredentials: true,                                                       // Allow credentials (cookies)
+		MaxAge:           12 * time.Hour,                                             // Cache duration for preflight requests
 	}))
 
 	r.Use(gin.Logger())
 	r.ForwardedByClientIP = true
 	r.SetTrustedProxies([]string{"127.0.0.1", "192.168.1.2", "10.0.0.0/8"})
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	routes.Register(r, handler)
 

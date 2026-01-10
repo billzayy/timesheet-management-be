@@ -9,8 +9,21 @@ import (
 	backend "github.com/billzayy/timesheet-management-be"
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
+// Get All Positions godoc
+//
+//	@Summary		Get All Positions
+//	@Description	Get All Positions Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			limit	query	string	true	"Limit pagination"
+//	@Param			offset	query	string	true	"Offset pagination"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/position/all [get]
 func (s *OrganizeHandler) GetAllPositions(c *gin.Context) {
 	ctx := context.Background()
 
@@ -41,6 +54,17 @@ func (s *OrganizeHandler) GetAllPositions(c *gin.Context) {
 	})
 }
 
+// Create Position godoc
+//
+//	@Summary		Create Position
+//	@Description	Create Position Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.PositionDTO	true	"Request Body"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/position/create [post]
 func (s *OrganizeHandler) CreatePosition(c *gin.Context) {
 	ctx := context.Background()
 
@@ -59,7 +83,27 @@ func (s *OrganizeHandler) CreatePosition(c *gin.Context) {
 		return
 	}
 
-	id := backend.GetTokenId(c)
+	value, ok := c.Get("token")
+
+	if !ok {
+		errStr = backend.ErrTokenNotFound.Error()
+
+		c.JSON(http.StatusBadRequest, backend.ResponseData{
+			Result:  nil,
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	var id uuid.UUID
+
+	switch t := value.(type) {
+	case string:
+		id = uuid.MustParse(t)
+	default:
+		id = uuid.Nil
+	}
 
 	if err := s.service.CreatePosition(ctx, input, id); err != nil {
 		errStr = err.Error()
@@ -80,6 +124,17 @@ func (s *OrganizeHandler) CreatePosition(c *gin.Context) {
 
 }
 
+// Update Position godoc
+//
+//	@Summary		Update Position
+//	@Description	Update Position Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.PositionDTO	true	"Request Body"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/position/update [put]
 func (s *OrganizeHandler) UpdatePosition(c *gin.Context) {
 	ctx := context.Background()
 
@@ -124,6 +179,17 @@ func (s *OrganizeHandler) UpdatePosition(c *gin.Context) {
 	})
 }
 
+// Delete Position godoc
+//
+//	@Summary		Delete Position
+//	@Description	Delete Position Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query	string	true	"Position Id"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/position/delete [delete]
 func (s *OrganizeHandler) DeletePosition(c *gin.Context) {
 	ctx := context.Background()
 

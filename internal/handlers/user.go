@@ -21,6 +21,17 @@ func NewUserHandler(s services.UserService) *UserHandler {
 	return &UserHandler{s}
 }
 
+// Create User godoc
+//
+//	@Summary		Create User
+//	@Description	Create User Information
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body		dto.RequestUserDTO	true	"Send Request Create User"
+//	@Success		200		{object}	backend.ResponseData
+//	@Failure		400		{object}	backend.ResponseData
+//	@Router			/user/create [post]
 func (h *UserHandler) Create(c *gin.Context) {
 	ctx := context.Background()
 
@@ -54,6 +65,18 @@ func (h *UserHandler) Create(c *gin.Context) {
 	})
 }
 
+// Get All Users godoc
+//
+//	@Summary		Get All
+//	@Description	Gett All Users Information
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			limit	query		string	true	"Limit Get"
+//	@Param			offset	query		string	true	"Offset for pagination"
+//	@Success		200		{object}	backend.ResponseData
+//	@Router			/user/all [get]
 func (h *UserHandler) GetAll(c *gin.Context) {
 	ctx := context.Background()
 
@@ -84,6 +107,17 @@ func (h *UserHandler) GetAll(c *gin.Context) {
 	})
 }
 
+// Get User By Email godoc
+//
+//	@Summary		Get User By Email
+//	@Description	Gett User Information By Email
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			email	query		string	true	"Email User"
+//	@Success		200		{object}	backend.ResponseData
+//	@Router			/user/by-email [get]
 func (h *UserHandler) GetByEmail(c *gin.Context) {
 	ctx := context.Background()
 
@@ -143,6 +177,17 @@ func (h *UserHandler) GetByEmail(c *gin.Context) {
 	})
 }
 
+// Get User By Id godoc
+//
+//	@Summary		Get User By Id
+//	@Description	Get User Information By Id
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id	path		string	true	"Id User"
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user/{id} [get]
 func (h *UserHandler) GetById(c *gin.Context) {
 	ctx := context.Background()
 
@@ -190,6 +235,17 @@ func (h *UserHandler) GetById(c *gin.Context) {
 	})
 }
 
+// Delete User By Id godoc
+//
+//	@Summary		Delete User By Id
+//	@Description	Delete User Information By Id
+//	@Tags			user
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Param			id	query		string	true	"Id User"
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/user/delete [delete]
 func (h *UserHandler) Delete(c *gin.Context) {
 	ctx := context.Background()
 

@@ -11,6 +11,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Get All Levels godoc
+//
+//	@Summary		Get All Levels
+//	@Description	Get All Levels Information
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			limit	query	string	true	"Limit pagination"
+//	@Param			offset	query	string	true	"Offset pagination"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/level/all [get]
 func (s *OrganizeHandler) GetAllLevels(c *gin.Context) {
 	ctx := context.Background()
 
@@ -41,6 +53,17 @@ func (s *OrganizeHandler) GetAllLevels(c *gin.Context) {
 	})
 }
 
+// Create Level godoc
+//
+//	@Summary		Create Level
+//	@Description	Create Level
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.LevelDTO	true	"Create Level Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/level/create [post]
 func (s *OrganizeHandler) CreateLevel(c *gin.Context) {
 	ctx := context.Background()
 
@@ -79,6 +102,17 @@ func (s *OrganizeHandler) CreateLevel(c *gin.Context) {
 	})
 }
 
+// Update Level godoc
+//
+//	@Summary		Update Level
+//	@Description	Update Level
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			request	body	dto.LevelDTO	true	"Create Level Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/level/update [put]
 func (s *OrganizeHandler) UpdateLevel(c *gin.Context) {
 	ctx := context.Background()
 
@@ -123,6 +157,17 @@ func (s *OrganizeHandler) UpdateLevel(c *gin.Context) {
 	})
 }
 
+// Delete Level godoc
+//
+//	@Summary		Delete Level
+//	@Description	Delete Level
+//	@Tags			organization
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	query	string	true	"Delete Level Information"
+//	@Security		BearerAuth
+//	@Success		200	{object}	backend.ResponseData
+//	@Router			/level/delete [delete]
 func (s *OrganizeHandler) DeleteLevel(c *gin.Context) {
 	ctx := context.Background()
 
