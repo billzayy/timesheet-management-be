@@ -56,12 +56,15 @@ func main() {
 
 	r := gin.New()
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:3001"}, // Allowed origins
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},        // Allowed HTTP methods
-		AllowHeaders:     []string{"Content-Type", "Authorization"},                  // Allowed headers
-		ExposeHeaders:    []string{"Content-Length"},                                 // Exposed headers
-		AllowCredentials: true,                                                       // Allow credentials (cookies)
-		MaxAge:           12 * time.Hour,                                             // Cache duration for preflight requests
+		AllowOrigins: []string{
+			"http://localhost:5173",
+			"http://localhost:3001",
+			"https://timesheet-management-be.onrender.com"}, // Allowed origins
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Allowed HTTP methods
+		AllowHeaders:     []string{"Content-Type", "Authorization"},           // Allowed headers
+		ExposeHeaders:    []string{"Content-Length"},                          // Exposed headers
+		AllowCredentials: true,                                                // Allow credentials (cookies)
+		MaxAge:           12 * time.Hour,                                      // Cache duration for preflight requests
 	}))
 
 	r.Use(gin.Logger())
