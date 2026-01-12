@@ -29,6 +29,7 @@ func NewUserHandler(s services.UserService) *UserHandler {
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body		dto.RequestUserDTO	true	"Send Request Create User"
+//	@Security		BearerAuth
 //	@Success		200		{object}	backend.ResponseData
 //	@Failure		400		{object}	backend.ResponseData
 //	@Router			/user/create [post]
@@ -245,7 +246,7 @@ func (h *UserHandler) GetById(c *gin.Context) {
 //	@Security		BearerAuth
 //	@Param			id	query		string	true	"Id User"
 //	@Success		200	{object}	backend.ResponseData
-//	@Router			/user/delete [delete]
+//	@Router			/user/{id} [get]
 func (h *UserHandler) Delete(c *gin.Context) {
 	ctx := context.Background()
 
