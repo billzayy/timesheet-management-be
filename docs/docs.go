@@ -953,6 +953,11 @@ const docTemplate = `{
         },
         "/user/create": {
             "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Create User Information",
                 "consumes": [
                     "application/json"
@@ -991,8 +996,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/delete": {
-            "delete": {
+        "/user/{id}": {
+            "get": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -1015,43 +1020,6 @@ const docTemplate = `{
                         "description": "Id User",
                         "name": "id",
                         "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/backend.ResponseData"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/{id}": {
-            "get": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "Get User Information By Id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "Get User By Id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Id User",
-                        "name": "id",
-                        "in": "path",
                         "required": true
                     }
                 ],

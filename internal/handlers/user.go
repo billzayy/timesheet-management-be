@@ -28,10 +28,10 @@ func NewUserHandler(s services.UserService) *UserHandler {
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
-//	@Param			request	body		dto.RequestUserDTO	true	"Send Request Create User"
+//	@Param			request	body	dto.RequestUserDTO	true	"Send Request Create User"
 //	@Security		BearerAuth
-//	@Success		200		{object}	backend.ResponseData
-//	@Failure		400		{object}	backend.ResponseData
+//	@Success		200	{object}	backend.ResponseData
+//	@Failure		400	{object}	backend.ResponseData
 //	@Router			/user/create [post]
 func (h *UserHandler) Create(c *gin.Context) {
 	ctx := context.Background()

@@ -727,10 +727,10 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get User Information By Id
+      description: Delete User Information By Id
       parameters:
       - description: Id User
-        in: path
+        in: query
         name: id
         required: true
         type: string
@@ -743,7 +743,7 @@ paths:
             $ref: '#/definitions/backend.ResponseData'
       security:
       - BearerAuth: []
-      summary: Get User By Id
+      summary: Delete User By Id
       tags:
       - user
   /user/all:
@@ -820,30 +820,9 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/backend.ResponseData'
-      summary: Create User
-      tags:
-      - user
-  /user/delete:
-    delete:
-      consumes:
-      - application/json
-      description: Delete User Information By Id
-      parameters:
-      - description: Id User
-        in: query
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/backend.ResponseData'
       security:
       - BearerAuth: []
-      summary: Delete User By Id
+      summary: Create User
       tags:
       - user
 securityDefinitions:
