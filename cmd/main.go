@@ -59,8 +59,7 @@ func main() {
 		AllowOrigins: []string{
 			"http://localhost:5173",
 			"http://localhost:3001",
-			"https://timesheet-management-be.onrender.com",
-			"https://extreme-jaine-testing-ncc-9d9188c1.koyeb.app"}, // Allowed origins
+			"https://verbal-dulce-billzay-23eb8cc3.koyeb.app"}, // Allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Allowed HTTP methods
 		AllowHeaders:     []string{"Content-Type", "Authorization"},           // Allowed headers
 		ExposeHeaders:    []string{"Content-Length"},                          // Exposed headers
