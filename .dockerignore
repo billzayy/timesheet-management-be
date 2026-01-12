@@ -4,3 +4,4 @@ migrations/pgdata
 .rest.env
 ./internal/http/*
 .git
+vendor/

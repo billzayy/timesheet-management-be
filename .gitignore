@@ -1,5 +1,4 @@
 vendor/
-go.sum
 migrations/pgdata
 migrations/*.up.sql
 migrations/*.down.sql

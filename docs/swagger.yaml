@@ -422,6 +422,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
       summary: Get List Permission
       tags:
       - role
@@ -542,6 +544,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
       summary: Get Role Id
       tags:
       - role
@@ -568,6 +572,8 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
       summary: Get List Role
       tags:
       - role

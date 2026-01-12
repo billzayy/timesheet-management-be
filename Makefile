@@ -3,7 +3,7 @@ DOCKER_GO_IMAGE_NAME=coderbillzay/timesheet-api
 DOCKERFILE_GO_PATH=./Dockerfile
 DOCKER_CONTEXT=.
 DOCKER_COMPOSE_FILE=./docker-compose.yml
-DOCKER_COMPOSE_CMD=docker-compose -f $(DOCKER_COMPOSE_FILE) 
+DOCKER_COMPOSE_CMD=docker compose
 
 # Default target
 production: swagger build run-docker-detached
@@ -30,8 +30,12 @@ build:
 
 run-docker:
 	@echo "Starting services with Docker Compose..."
-	$(DOCKER_COMPOSE_CMD) up 
+	$(DOCKER_COMPOSE_CMD) up
 
 run-docker-detached:
 	@echo "Starting services with Docker Compose..."
 	$(DOCKER_COMPOSE_CMD) up -d
+
+down-docker:
+	@echo "Starting services with Docker Compose..."
+	$(DOCKER_COMPOSE_CMD) down

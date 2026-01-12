@@ -369,6 +369,11 @@ const docTemplate = `{
         },
         "/permission/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get List Permission",
                 "consumes": [
                     "application/json"
@@ -551,6 +556,11 @@ const docTemplate = `{
         },
         "/role": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get Role Id Information",
                 "consumes": [
                     "application/json"
@@ -583,6 +593,11 @@ const docTemplate = `{
         },
         "/role/all": {
             "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
                 "description": "Get List Role Information",
                 "consumes": [
                     "application/json"

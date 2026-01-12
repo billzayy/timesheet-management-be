@@ -22,6 +22,7 @@ CREATE TABLE Users(
   tax_code VARCHAR(10) NULL UNIQUE,
   is_active BOOLEAN NOT NULL DEFAULT(false),
   mezon_id VARCHAR(255) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid,
   FOREIGN KEY (created_by) REFERENCES Users(id)
@@ -159,11 +160,11 @@ INSERT INTO positions (name, short_name, code, color, created_by) VALUES
 INSERT INTO users 
   (sur_name, last_name, email, dob, gender, phone, address, bank_account, identify_number, identify_issue_date, identify_place, mezon_id, 
   level_id, branch_id, position_id, user_type_id, 
-  is_active, created_by) VALUES 
+  is_active, created_by, password) VALUES 
   ('Admin', 'Root', 'admin@company.com', '1990-01-01', 'do not tell', '0123456789', 'Head Office', '00000000000000', '123456789012', '2010-01-01', 'Government', 'MEZON_SUPER_ADMIN', 
   (SELECT id FROM levels WHERE code = 'ADMIN'), 
   (SELECT id FROM branches WHERE code = 'HO'), 
   (SELECT id FROM positions WHERE code = 'SAD'), 
   (SELECT id FROM user_type WHERE code = 'SAD'), 
-  TRUE, NULL);
+  TRUE, NULL, '$2a$10$hB/fKq0nCkCoqLDOe18P4uoCZiCaixDMwqFiL8mJoA/UR8Z7ExaZa');
 

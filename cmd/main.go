@@ -53,8 +53,8 @@ func main() {
 
 	docs.SwaggerInfo.Title = "Swagger Example API"
 	docs.SwaggerInfo.Version = "2.0"
-	docs.SwaggerInfo.Description = "This is a sample server."
-	docs.SwaggerInfo.Host = "localhost:" + os.Getenv("REST_PORT")
+	docs.SwaggerInfo.Description = "Timesheet Management API server."
+	docs.SwaggerInfo.Host = os.Getenv("REST_HOST") + ":" + os.Getenv("REST_PORT")
 	docs.SwaggerInfo.BasePath = "/api"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 

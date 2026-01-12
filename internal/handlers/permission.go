@@ -23,6 +23,7 @@ func NewPermissionHandler(s services.PermissionService) *PermissionHandler {
 //	@Tags			role
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Success		200	{object}	backend.ResponseData
 //	@Router			/permission/all [get]
 func (h *PermissionHandler) GetListPermission(c *gin.Context) {

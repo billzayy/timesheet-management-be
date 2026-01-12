@@ -26,6 +26,7 @@ func NewRoleHandler(s services.RoleService) *RoleHandler {
 //	@Tags			role
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			limit	query		string	true	"Limit pagination"
 //	@Param			offset	query		string	true	"Offset pagination"
 //	@Success		200		{object}	backend.ResponseData
@@ -67,6 +68,7 @@ func (h *RoleHandler) GetListRole(c *gin.Context) {
 //	@Tags			role
 //	@Accept			json
 //	@Produce		json
+//	@Security		BearerAuth
 //	@Param			id	query		string	true	"Role Id"
 //	@Success		200	{object}	backend.ResponseData
 //	@Router			/role [get]

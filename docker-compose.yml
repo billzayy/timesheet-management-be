@@ -1,11 +1,10 @@
 services:
   server:
-    image: timesheet_api:latest
+    image: coderbillzay/timesheet-api:latest
     build: .
     container_name: api
-
     ports:
-      - "${REST_PORT:-8000}:8080"
+      - "${REST_PORT:-8000}:3001"
     networks:
       - app-network
     env_file:
@@ -24,7 +23,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: timesheet_management
     ports:
-      - "${POSTGRES_PORT:-5591}:5432"
+      - "${POSTGRES_PORT:-5591}:${POSTGRES_PORT}"
     volumes:
       - ./migrations:/docker-entrypoint-initdb.d
       - ../pgdata:/var/lib/postgresql/data
