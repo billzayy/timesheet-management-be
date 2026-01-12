@@ -22,7 +22,7 @@ const (
 )
 
 type UserService interface {
-	CreateUser(ctx context.Context, dto *dto.RequestUserDTO) error
+	CreateUser(ctx context.Context, dto *dto.RequestUserDTO, id uuid.UUID) error
 	GetAllUsers(ctx context.Context, limit, offset string) ([]dto.GetUserDTO, error)
 	GetByEmail(ctx context.Context, email string) (dto.GetUserDTO, error)
 	GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO, error)
@@ -37,7 +37,7 @@ func NewUserService(repo repositories.UserRepository) UserService {
 	return &userService{repo}
 }
 
-func (s *userService) CreateUser(ctx context.Context, input *dto.RequestUserDTO) error {
+func (s *userService) CreateUser(ctx context.Context, input *dto.RequestUserDTO, id uuid.UUID) error {
 	requestUser := input.ToUser()
 
 	hashedPass, err := middleware.HashPassword(input.Password)
@@ -47,8 +47,9 @@ func (s *userService) CreateUser(ctx context.Context, input *dto.RequestUserDTO)
 	}
 
 	requestUser.Password = hashedPass
+	requestUser.CreatedBy = &id
 
-	morning, afternoon, err := getShiftTime(input)
+	morning, afternoon, err := getShiftTime(input, id)
 
 	if err != nil {
 		return err
@@ -155,7 +156,7 @@ func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
 	}
 }
 
-func getShiftTime(input *dto.RequestUserDTO) (*models.WorkingTime, *models.WorkingTime, error) {
+func getShiftTime(input *dto.RequestUserDTO, creatorId uuid.UUID) (*models.WorkingTime, *models.WorkingTime, error) {
 	morningStartAt, err := time.Parse(
 		"15:04", withDefault(input.MorningStartAt, DefaultMorningStart))
 
@@ -189,6 +190,7 @@ func getShiftTime(input *dto.RequestUserDTO) (*models.WorkingTime, *models.Worki
 		StartTime:    morningStartAt,
 		EndTime:      morningEndAt,
 		WorkingHours: input.MorningWorkingTime,
+		CreatedBy:    creatorId,
 	}
 
 	afternoonShift := dto.WorkingTimeDTO{
@@ -196,6 +198,7 @@ func getShiftTime(input *dto.RequestUserDTO) (*models.WorkingTime, *models.Worki
 		StartTime:    afternoonStartAt,
 		EndTime:      afternoonEndAt,
 		WorkingHours: input.AfternoonWorkingTime,
+		CreatedBy:    creatorId,
 	}
 
 	return morningShift.ToWorkingTime(), afternoonShift.ToWorkingTime(), nil

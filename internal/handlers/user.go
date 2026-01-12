@@ -49,7 +49,9 @@ func (h *UserHandler) Create(c *gin.Context) {
 		return
 	}
 
-	if err := h.service.CreateUser(ctx, &inputUser); err != nil {
+	id := backend.GetTokenId(c)
+
+	if err := h.service.CreateUser(ctx, &inputUser, id); err != nil {
 		errStr = err.Error()
 		c.JSON(http.StatusInternalServerError, backend.ResponseData{
 			Result:  nil,

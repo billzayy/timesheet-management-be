@@ -7,6 +7,9 @@ Content-Type: application/json
 
 {
   "address": "Ho Chi Minh, Quan 2",
+  "afternoon_end_at": "17:00",
+  "afternoon_start_at": "13:00",
+  "afternoon_working_time": 4,
   "avatar_path": "/avatars/user123.png",
   "bank_account": "918247129012",
   "branch_id": 1,
@@ -22,6 +25,9 @@ Content-Type: application/json
   "last_name": "Tuan",
   "level_id": 1,
   "mezon_id": "MEZON001",
+  "morning_end_at": "12:00",
+  "morning_start_at": "8:00",
+  "morning_working_time": 4,
   "password": "password",
   "phone": "09123456781",
   "position_id": 3,

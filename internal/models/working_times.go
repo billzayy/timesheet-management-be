@@ -14,6 +14,6 @@ type WorkingTime struct {
 	StartTime    time.Time `gorm:"type:time;not null" json:"start_time"`
 	EndTime      time.Time `gorm:"type:time;not null" json:"end_time"`
 	WorkingHours float64   `gorm:"->" json:"working_hours"`
-	// CreatedAt    time.Time `gorm:"type:timestamptz;not null;default:now()" json:"created_at"`
-	// CreatedBy    uuid.UUID `gorm:"type:uuid;not null" json:"created_by,omitempty"`
+	CreatedAt    time.Time `gorm:"type:timestamptz;not null;default:now()" json:"created_at"`
+	CreatedBy    uuid.UUID `gorm:"type:uuid;not null" json:"created_by,omitempty"`
 }
