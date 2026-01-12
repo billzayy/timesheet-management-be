@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
@@ -25,17 +26,17 @@ func (s *userService) Login(ctx context.Context, input *dto.LoginDTO) (*dto.Resp
 	data, err := s.repo.CheckEmailAndPassword(ctx, input.Email)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("check email and password failed")
 	}
 
 	valid, err := middleware.ValidatePassword(input.Password, data.Password)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed on validate password")
 	}
 
 	if !valid {
-		return nil, err
+		return nil, fmt.Errorf("password is not valid")
 	}
 
 	expiredTime := time.Now().Add(time.Hour * 24).Unix()
