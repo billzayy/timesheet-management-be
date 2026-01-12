@@ -35,10 +35,6 @@ func main() {
 		cfg.DBHost, cfg.DBUser, cfg.DBPass, cfg.DBName, cfg.DBPort,
 	)
 
-	if cfg.DBHost == "db" {
-		gin.SetMode(gin.ReleaseMode)
-	}
-
 	db, err := database.Connect(dsn)
 
 	if err != nil {
@@ -54,11 +50,11 @@ func main() {
 	docs.SwaggerInfo.Title = "Swagger Example API"
 	docs.SwaggerInfo.Version = "2.0"
 	docs.SwaggerInfo.Description = "Timesheet Management API server."
-	docs.SwaggerInfo.Host = os.Getenv("REST_HOST") + ":" + os.Getenv("REST_PORT")
+	// docs.SwaggerInfo.Host = os.Getenv("REST_HOST") + ":" + os.Getenv("REST_PORT")
 	docs.SwaggerInfo.BasePath = "/api"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	r := gin.Default()
+	r := gin.New()
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173", "http://localhost:3001"}, // Allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},        // Allowed HTTP methods
