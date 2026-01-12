@@ -47,7 +47,7 @@ func main() {
 		),
 	)
 
-	docs.SwaggerInfo.Title = "Swagger Example API"
+	docs.SwaggerInfo.Title = "Timesheet Manage Swagger API"
 	docs.SwaggerInfo.Version = "2.0"
 	docs.SwaggerInfo.Description = "Timesheet Management API server."
 	// docs.SwaggerInfo.Host = os.Getenv("REST_HOST") + ":" + os.Getenv("REST_PORT")
