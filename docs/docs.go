@@ -650,7 +650,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "organization"
+                    "role"
                 ],
                 "summary": "Create Role",
                 "parameters": [
@@ -689,7 +689,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "organization"
+                    "role"
                 ],
                 "summary": "Delete Role",
                 "parameters": [

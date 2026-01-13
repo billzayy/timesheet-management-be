@@ -600,7 +600,7 @@ paths:
       - BearerAuth: []
       summary: Create Role
       tags:
-      - organization
+      - role
   /role/delete:
     delete:
       consumes:
@@ -623,7 +623,7 @@ paths:
       - BearerAuth: []
       summary: Delete Role
       tags:
-      - organization
+      - role
   /user-type/all:
     get:
       consumes:
