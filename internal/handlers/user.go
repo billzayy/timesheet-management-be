@@ -248,7 +248,7 @@ func (h *UserHandler) GetById(c *gin.Context) {
 //	@Security		BearerAuth
 //	@Param			id	query		string	true	"Id User"
 //	@Success		200	{object}	backend.ResponseData
-//	@Router			/user/{id} [get]
+//	@Router			/user [delete]
 func (h *UserHandler) Delete(c *gin.Context) {
 	ctx := context.Background()
 

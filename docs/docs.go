@@ -711,6 +711,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/user": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete User Information By Id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "Delete User By Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Id User",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/backend.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/user-type/all": {
             "get": {
                 "security": [
@@ -1003,7 +1040,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete User Information By Id",
+                "description": "Get User Information By Id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1013,13 +1050,13 @@ const docTemplate = `{
                 "tags": [
                     "user"
                 ],
-                "summary": "Delete User By Id",
+                "summary": "Get User By Id",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Id User",
                         "name": "id",
-                        "in": "query",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -1253,6 +1290,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "position_id": {
+                    "type": "integer"
+                },
+                "role_id": {
                     "type": "integer"
                 },
                 "sur_name": {

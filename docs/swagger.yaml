@@ -136,6 +136,8 @@ definitions:
         type: string
       position_id:
         type: integer
+      role_id:
+        type: integer
       sur_name:
         maxLength: 100
         type: string
@@ -624,6 +626,29 @@ paths:
       summary: Delete Role
       tags:
       - role
+  /user:
+    delete:
+      consumes:
+      - application/json
+      description: Delete User Information By Id
+      parameters:
+      - description: Id User
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Delete User By Id
+      tags:
+      - user
   /user-type/all:
     get:
       consumes:
@@ -727,10 +752,10 @@ paths:
     get:
       consumes:
       - application/json
-      description: Delete User Information By Id
+      description: Get User Information By Id
       parameters:
       - description: Id User
-        in: query
+        in: path
         name: id
         required: true
         type: string
@@ -743,7 +768,7 @@ paths:
             $ref: '#/definitions/backend.ResponseData'
       security:
       - BearerAuth: []
-      summary: Delete User By Id
+      summary: Get User By Id
       tags:
       - user
   /user/all:

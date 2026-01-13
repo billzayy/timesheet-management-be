@@ -26,16 +26,20 @@ type RequestUserDTO struct {
 	EmergencyContactPhone *string   `json:"emergency_contact_phone,omitempty"`
 	TaxCode               *string   `json:"tax_code,omitempty"`
 	MezonID               string    `json:"mezon_id" binding:"required"`
-	LevelID               int64     `json:"level_id" binding:"required"`
-	BranchID              int64     `json:"branch_id" binding:"required"`
-	PositionID            int64     `json:"position_id" binding:"required"`
-	UserTypeID            int64     `json:"user_type_id" binding:"required"`
-	MorningWorkingTime    float64   `json:"morning_working_time"`
-	MorningStartAt        string    `json:"morning_start_at"`
-	MorningEndAt          string    `json:"morning_end_at"`
-	AfternoonStartAt      string    `json:"afternoon_start_at"`
-	AfternoonEndAt        string    `json:"afternoon_end_at"`
-	AfternoonWorkingTime  float64   `json:"afternoon_working_time"`
+
+	LevelID    int64 `json:"level_id" binding:"required"`
+	BranchID   int64 `json:"branch_id" binding:"required"`
+	PositionID int64 `json:"position_id" binding:"required"`
+	UserTypeID int64 `json:"user_type_id" binding:"required"`
+
+	MorningWorkingTime   float64 `json:"morning_working_time"`
+	MorningStartAt       string  `json:"morning_start_at"`
+	MorningEndAt         string  `json:"morning_end_at"`
+	AfternoonStartAt     string  `json:"afternoon_start_at"`
+	AfternoonEndAt       string  `json:"afternoon_end_at"`
+	AfternoonWorkingTime float64 `json:"afternoon_working_time"`
+
+	RoleId int64 `json:"role_id"`
 }
 
 type GetUserDTO struct {
