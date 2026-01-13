@@ -138,6 +138,7 @@ func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
 		EmergencyContactPhone: r.EmergencyContactPhone,
 		TaxCode:               r.TaxCode,
 		MezonID:               r.MezonID,
+		Roles:                 r.RoleName,
 		LevelID:               r.LevelID,
 		BranchID:              r.BranchID,
 		PositionID:            r.PositionID,

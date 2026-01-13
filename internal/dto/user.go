@@ -55,6 +55,7 @@ type GetUserDTO struct {
 	EmergencyContactPhone *string   `json:"emergency_contact_phone,omitempty"`
 	TaxCode               *string   `json:"tax_code,omitempty"`
 	MezonID               string    `json:"mezon_id" `
+	Roles                 []string  `json:"roles,omitempty"`
 	LevelID               int64     `json:"level_id" `
 	LevelName             string    `json:"level_name"`
 	BranchID              int64     `json:"branch_id" `

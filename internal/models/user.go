@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 type User struct {
@@ -73,6 +74,8 @@ type UserRead struct {
 	AfternoonEndAt       string  `json:"afternoon_end_at"`
 	AfternoonWorkingTime float64 `json:"afternoon_working_time"`
 	BranchColor          string  `json:"branch_color"`
+
+	RoleName pq.StringArray `gorm:"column:role_name;type:text[]" json:"role_names"`
 }
 
 func (User) TableName() string {
