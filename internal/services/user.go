@@ -4,21 +4,12 @@ import (
 	"context"
 	"fmt"
 	"strconv"
-	"strings"
-	"time"
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
+	"github.com/billzayy/timesheet-management-be/internal/helper"
 	"github.com/billzayy/timesheet-management-be/internal/middleware"
-	"github.com/billzayy/timesheet-management-be/internal/models"
 	"github.com/billzayy/timesheet-management-be/internal/repositories"
 	"github.com/google/uuid"
-)
-
-const (
-	DefaultMorningStart   = "08:00"
-	DefaultMorningEnd     = "12:00"
-	DefaultAfternoonStart = "13:00"
-	DefaultAfternoonEnd   = "17:00"
 )
 
 type UserService interface {
@@ -49,13 +40,13 @@ func (s *userService) CreateUser(ctx context.Context, input *dto.RequestUserDTO,
 	requestUser.Password = hashedPass
 	requestUser.CreatedBy = &id
 
-	morning, afternoon, err := getShiftTime(input, id)
+	morning, afternoon, err := helper.ConvertShiftTime(input, id)
 
 	if err != nil {
 		return err
 	}
 
-	return s.repo.Create(ctx, &requestUser, morning, afternoon)
+	return s.repo.Create(ctx, &requestUser, morning, afternoon, input.RoleId)
 }
 
 func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr string) ([]dto.GetUserDTO, error) {
@@ -80,7 +71,7 @@ func (s *userService) GetAllUsers(ctx context.Context, limitStr, offsetStr strin
 	result := make([]dto.GetUserDTO, 0, len(rows))
 
 	for _, r := range rows {
-		result = append(result, convertUserReadToDTO(r))
+		result = append(result, helper.ConvertUserReadToDTO(r))
 	}
 
 	return result, nil
@@ -93,7 +84,7 @@ func (s *userService) GetByEmail(ctx context.Context, email string) (dto.GetUser
 		return dto.GetUserDTO{}, err
 	}
 
-	result := convertUserReadToDTO(row)
+	result := helper.ConvertUserReadToDTO(row)
 
 	return result, nil
 }
@@ -105,7 +96,7 @@ func (s *userService) GetById(ctx context.Context, id uuid.UUID) (dto.GetUserDTO
 		return dto.GetUserDTO{}, err
 	}
 
-	result := convertUserReadToDTO(row)
+	result := helper.ConvertUserReadToDTO(row)
 
 	return result, nil
 }
@@ -118,96 +109,4 @@ func (s *userService) Delete(ctx context.Context, inputId string) error {
 	}
 
 	return s.repo.Delete(ctx, id)
-}
-
-func convertUserReadToDTO(r models.UserRead) dto.GetUserDTO {
-	return dto.GetUserDTO{
-		FullName:              r.FullName,
-		Email:                 r.Email,
-		DOB:                   r.DOB,
-		Gender:                r.Gender,
-		Phone:                 r.Phone,
-		CurrentAddress:        r.CurrentAddress,
-		Address:               r.Address,
-		AvatarPath:            r.AvatarPath,
-		BankAccount:           *r.BankAccount,
-		IdentifyNumber:        *r.IdentifyNumber,
-		IdentifyIssueDate:     *r.IdentifyIssueDate,
-		IdentifyPlace:         *r.IdentifyPlace,
-		EmergencyContact:      r.EmergencyContact,
-		EmergencyContactPhone: r.EmergencyContactPhone,
-		TaxCode:               r.TaxCode,
-		MezonID:               r.MezonID,
-		Roles:                 r.RoleName,
-		LevelID:               r.LevelID,
-		BranchID:              r.BranchID,
-		PositionID:            r.PositionID,
-		UserTypeID:            r.UserTypeID,
-		BranchName:            *r.BranchName,
-		LevelName:             *r.LevelName,
-		PositionName:          *r.PositionName,
-		UserTypeName:          *r.UserTypeName,
-		MorningStartAt:        r.MorningStartAt,
-		MorningEndAt:          r.MorningEndAt,
-		MorningWorkingTime:    r.MorningWorkingTime,
-		AfternoonStartAt:      r.AfternoonStartAt,
-		AfternoonEndAt:        r.AfternoonEndAt,
-		AfternoonWorkingTime:  r.AfternoonWorkingTime,
-		ID:                    r.UserID,
-	}
-}
-
-func getShiftTime(input *dto.RequestUserDTO, creatorId uuid.UUID) (*models.WorkingTime, *models.WorkingTime, error) {
-	morningStartAt, err := time.Parse(
-		"15:04", withDefault(input.MorningStartAt, DefaultMorningStart))
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	morningEndAt, err := time.Parse(
-		"15:04", withDefault(input.MorningEndAt, DefaultMorningEnd))
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	afternoonStartAt, err := time.Parse(
-		"15:04", withDefault(input.AfternoonStartAt, DefaultAfternoonStart))
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	afternoonEndAt, err := time.Parse(
-		"15:04", withDefault(input.AfternoonEndAt, DefaultAfternoonEnd))
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	morningShift := dto.WorkingTimeDTO{
-		ShiftName:    "morning",
-		StartTime:    morningStartAt,
-		EndTime:      morningEndAt,
-		WorkingHours: input.MorningWorkingTime,
-		CreatedBy:    creatorId,
-	}
-
-	afternoonShift := dto.WorkingTimeDTO{
-		ShiftName:    "afternoon",
-		StartTime:    afternoonStartAt,
-		EndTime:      afternoonEndAt,
-		WorkingHours: input.AfternoonWorkingTime,
-		CreatedBy:    creatorId,
-	}
-
-	return morningShift.ToWorkingTime(), afternoonShift.ToWorkingTime(), nil
-}
-
-func withDefault(value, defaultValue string) string {
-	if strings.TrimSpace(value) == "" {
-		return defaultValue
-	}
-	return value
 }

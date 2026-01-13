@@ -12,7 +12,7 @@ import (
 
 type UserRepository interface {
 	Create(ctx context.Context, user *models.User,
-		morningShift *models.WorkingTime, nightShift *models.WorkingTime) error
+		morningShift *models.WorkingTime, nightShift *models.WorkingTime, roleId int64) error
 	FindAll(ctx context.Context, limit, offset int) ([]models.UserRead, error)
 	FindByEmail(ctx context.Context, email string) (models.UserRead, error)
 	FindById(ctx context.Context, id uuid.UUID) (models.UserRead, error)
@@ -30,7 +30,7 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 }
 
 func (s *userRepo) Create(ctx context.Context, user *models.User,
-	morningShift *models.WorkingTime, nightShift *models.WorkingTime) error {
+	morningShift *models.WorkingTime, nightShift *models.WorkingTime, roleId int64) error {
 
 	return s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		if err := gorm.G[models.User](tx).Create(ctx, user); err != nil {
@@ -50,6 +50,14 @@ func (s *userRepo) Create(ctx context.Context, user *models.User,
 		nightShift.EntityId = user.ID
 
 		if err := gorm.G[models.WorkingTime](tx).Create(ctx, nightShift); err != nil {
+			return err // rollback
+		}
+
+		if err := gorm.G[models.UserRole](tx).Create(ctx, &models.UserRole{
+			UserId:    user.ID,
+			RoleId:    roleId,
+			CreatedBy: *user.CreatedBy,
+		}); err != nil {
 			return err // rollback
 		}
 
@@ -129,6 +137,16 @@ func (r *userRepo) Delete(ctx context.Context, id uuid.UUID) error {
 		}
 
 		rowAffected, err = gorm.G[models.WorkingTime](tx).Where("entity_id = ?", id).Delete(ctx)
+
+		if err != nil {
+			return err // rollback
+		}
+
+		if rowAffected == 0 {
+			return backend.ErrUserNotFound
+		}
+
+		rowAffected, err = gorm.G[models.UserRole](tx).Where("user_id = ?", id).Delete(ctx)
 
 		if err != nil {
 			return err // rollback

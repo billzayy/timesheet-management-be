@@ -33,3 +33,15 @@ type PermissionNode struct {
 	DisplayName string           `json:"display_name"`
 	Children    []PermissionNode `json:"children"`
 }
+
+type UserRole struct {
+	UserId uuid.UUID `gorm:"type:uuid; not null" json:"user_id"`
+	RoleId int64     `gorm:"type:bigint;not null" json:"role_id"`
+
+	CreatedAt time.Time `gorm:"type:timestamptz;not null;default:now()" json:"created_at"`
+	CreatedBy uuid.UUID `gorm:"type:uuid;not null" json:"created_by"`
+}
+
+func (UserRole) TableName() string {
+	return "user_roles"
+}

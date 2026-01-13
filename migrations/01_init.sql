@@ -1,3 +1,27 @@
+DROP VIEW IF EXISTS user_daily_summary_v;
+DROP VIEW IF EXISTS branch_working_time_summary_v;
+
+ALTER TABLE users
+DROP CONSTRAINT fk_level,
+DROP CONSTRAINT fk_branch,
+DROP CONSTRAINT fk_position,
+DROP CONSTRAINT fk_user_type;
+
+DROP TABLE IF EXISTS role_permissions;
+DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS permissions;
+DROP TABLE IF EXISTS working_times;
+DROP TABLE IF EXISTS roles;
+DROP TABLE IF EXISTS levels;
+DROP TABLE IF EXISTS branches;
+DROP TABLE IF EXISTS user_type;
+DROP TABLE IF EXISTS positions;
+DROP TABLE IF EXISTS users;
+
+DROP TYPE IF EXISTS genderType;
+DROP TYPE IF EXISTS entityType;
+DROP TYPE IF EXISTS shiftType;
+
 CREATE TYPE genderType AS ENUM ('male', 'female', 'do not tell');
 CREATE TYPE entityType AS ENUM('user', 'branch');
 CREATE TYPE shiftType AS ENUM('morning', 'afternoon');
@@ -25,7 +49,7 @@ CREATE TABLE Users(
   password VARCHAR(255) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid,
-  FOREIGN KEY (created_by) REFERENCES Users(id)
+  FOREIGN KEY (created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE Levels(
@@ -36,7 +60,7 @@ CREATE TABLE Levels(
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid NULL,
-  FOREIGN KEY(created_by) REFERENCES Users(id)
+  FOREIGN KEY(created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE Branches(
@@ -48,7 +72,7 @@ CREATE TABLE Branches(
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid NULL,
   uuid UUID DEFAULT gen_random_uuid() NOT NULL,
-  FOREIGN KEY(created_by) REFERENCES Users(id)
+  FOREIGN KEY(created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE Positions(
@@ -59,16 +83,16 @@ CREATE TABLE Positions(
   color VARCHAR(20) NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid NULL,
-  FOREIGN KEY(created_by) REFERENCES Users(id)
+  FOREIGN KEY(created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
-CREATE TABLE User_Type(
+CREATE TABLE User_Types(
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(255) NOT NULL UNIQUE,
   code VARCHAR(10) NOT NULL UNIQUE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by uuid NULL,
-  FOREIGN KEY(created_by) REFERENCES Users(id)
+  FOREIGN KEY(created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE working_times (
@@ -80,9 +104,10 @@ CREATE TABLE working_times (
   end_time TIME NOT NULL,
   working_hours NUMERIC(3,1) NOT NULL GENERATED ALWAYS AS (ROUND(EXTRACT(EPOCH FROM (end_time - start_time)) / 3600, 1)) STORED,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  created_by uuid NOT NULL,
+  created_by uuid NULL,
   CHECK (end_time > start_time),
-  UNIQUE (entity_type, entity_id, shift_name)
+  UNIQUE (entity_type, entity_id, shift_name),
+  FOREIGN KEY(created_by) REFERENCES Users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE permissions(
@@ -94,7 +119,7 @@ CREATE TABLE permissions(
 	created_by uuid NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 	FOREIGN KEY (parent_id) REFERENCES permissions(id) ON DELETE CASCADE,
-	FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE
+	FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE roles(
@@ -104,29 +129,29 @@ CREATE TABLE roles(
 	description varchar(200) not null,
 	created_by uuid NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-	FOREIGN KEY(created_by) REFERENCES users(id)
+	FOREIGN KEY(created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 CREATE TABLE role_permissions(
 	role_id BIGINT NOT NULL,
 	permission_id BIGINT NOT NULL,
-	created_by uuid NOT NULL,
+	created_by uuid NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 	PRIMARY KEY(role_id, permission_id),
-	FOREIGN KEY (role_id) REFERENCES roles(id),
-	FOREIGN KEY (permission_id) REFERENCES permissions(id),
-	FOREIGN KEY(created_by) REFERENCES users(id)
+	FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+	FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE,
+	FOREIGN KEY(created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
-CREATE TABLE user_role(
+CREATE TABLE user_roles(
 	user_id uuid NOT NULL,
 	role_id BIGINT NOT NULL,
-	created_by uuid NOT NULL,
+	created_by uuid NULL,
 	created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
 	PRIMARY KEY(role_id, user_id),
-	FOREIGN KEY (role_id) REFERENCES roles(id),
-	FOREIGN KEY (user_id) REFERENCES users(id),
-	FOREIGN KEY(created_by) REFERENCES users(id)
+	FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+	FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+	FOREIGN KEY(created_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 ALTER TABLE users
@@ -139,9 +164,9 @@ ALTER TABLE users
 ADD CONSTRAINT fk_level FOREIGN KEY (level_id) REFERENCES levels(id),
 ADD CONSTRAINT fk_branch FOREIGN KEY (branch_id) REFERENCES branches(id),
 ADD CONSTRAINT fk_position FOREIGN KEY (position_id) REFERENCES positions(id),
-ADD CONSTRAINT fk_user_type FOREIGN KEY (user_type_id) REFERENCES user_Type(id);
+ADD CONSTRAINT fk_user_type FOREIGN KEY (user_type_id) REFERENCES user_Types(id);
 
-INSERT INTO user_type (name,code,created_by)
+INSERT INTO user_types (name,code,created_by)
   VALUES ('Super Admin','SAD',NULL)
   ON CONFLICT (code) DO NOTHING;
 
@@ -165,6 +190,6 @@ INSERT INTO users
   (SELECT id FROM levels WHERE code = 'ADMIN'), 
   (SELECT id FROM branches WHERE code = 'HO'), 
   (SELECT id FROM positions WHERE code = 'SAD'), 
-  (SELECT id FROM user_type WHERE code = 'SAD'), 
+  (SELECT id FROM user_types WHERE code = 'SAD'), 
   TRUE, NULL, '$2a$10$hB/fKq0nCkCoqLDOe18P4uoCZiCaixDMwqFiL8mJoA/UR8Z7ExaZa');
 

@@ -31,6 +31,7 @@ Content-Type: application/json
   "password": "password",
   "phone": "09123456781",
   "position_id": 3,
+  "role_id": 9,
   "sur_name": "Nguyen",
   "tax_code": "TX1234",
   "user_type_id": 1

@@ -28,7 +28,7 @@
 	('Auto test','Auto test','Auto test','#dc3e09',(SELECT id FROM users WHERE sur_name='Admin'))
 	ON CONFLICT (code) DO NOTHING;
 	
-	INSERT INTO user_type (name, code, created_by) VALUES
+	INSERT INTO user_types (name, code, created_by) VALUES
 	('Staff','sta',(SELECT id FROM users WHERE sur_name='Admin')),
 	('Intern','int',(SELECT id FROM users WHERE sur_name='Admin')),
 	('Colaborator','col',(SELECT id FROM users WHERE sur_name='Admin')),

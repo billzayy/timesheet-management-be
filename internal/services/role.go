@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
+	"github.com/billzayy/timesheet-management-be/internal/helper"
 	"github.com/billzayy/timesheet-management-be/internal/models"
 	"github.com/billzayy/timesheet-management-be/internal/repositories"
 	"github.com/google/uuid"
@@ -78,7 +79,7 @@ func (s *roleService) GetRoleById(ctx context.Context, id int64) (dto.RolePermis
 		return dto.RolePermissionDTO{}, err
 	}
 
-	userList := converUserDTO(userDatas)
+	userList := helper.ConverUserDTO(userDatas)
 
 	return dto.RolePermissionDTO{
 		Name:               roleData.Name,
@@ -103,29 +104,4 @@ func (s *roleService) CreateRole(ctx context.Context, input dto.RoleDTO, id uuid
 
 func (s *roleService) DeleteRole(ctx context.Context, id int64) error {
 	return s.roleRepo.Delete(ctx, id)
-}
-
-func converUserDTO(input []models.UserRead) []dto.RoleUserDTO {
-	result := make([]dto.RoleUserDTO, 0, len(input))
-
-	for _, m := range input {
-		result = append(result,
-			dto.RoleUserDTO{
-				FullName:   m.FullName,
-				Email:      m.Email,
-				AvatarPath: m.AvatarPath,
-				LevelID:    m.LevelID,
-				LevelName:  m.LevelName,
-				BranchID:   m.BranchID,
-				BranchName: m.LevelName,
-				// BranchColor:  m.BranchColor,
-				PositionID:   m.PositionID,
-				PositionName: m.PositionName,
-				UserTypeID:   m.UserTypeID,
-				UserTypeName: m.UserTypeName,
-				UserID:       m.UserID,
-			})
-	}
-
-	return result
 }

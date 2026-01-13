@@ -73,11 +73,11 @@ FROM users u
 LEFT JOIN branches   b  ON b.id  = u.branch_id
 LEFT JOIN levels     l  ON l.id  = u.level_id
 LEFT JOIN positions  p  ON p.id  = u.position_id
-LEFT JOIN user_type  ut ON ut.id = u.user_type_id
+LEFT JOIN user_types  ut ON ut.id = u.user_type_id
 LEFT JOIN working_times wt
        ON wt.entity_id   = u.id
       AND wt.entity_type = 'user'
-LEFT JOIN user_role ur ON u.id = ur.user_id
+LEFT JOIN user_roles ur ON u.id = ur.user_id
 LEFT JOIN roles r ON r.id = ur.role_id
 
 GROUP BY
