@@ -59,6 +59,7 @@ func main() {
 		AllowOrigins: []string{
 			"http://localhost:5173",
 			"http://localhost:3001",
+			"https://timesheet-management-fe.vercel.app/",      // FE Vercel
 			"https://verbal-dulce-billzay-23eb8cc3.koyeb.app"}, // Allowed origins
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}, // Allowed HTTP methods
 		AllowHeaders:     []string{"Content-Type", "Authorization"},           // Allowed headers
