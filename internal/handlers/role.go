@@ -114,7 +114,7 @@ func (h *RoleHandler) GetRoleById(c *gin.Context) {
 //
 //	@Summary		Create Role
 //	@Description	Create Role
-//	@Tags			organization
+//	@Tags			role
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body	dto.RoleDTO	true	"Create Role Information"
@@ -162,7 +162,7 @@ func (h *RoleHandler) CreateRole(c *gin.Context) {
 //
 //	@Summary		Delete Role
 //	@Description	Delete Role
-//	@Tags			organization
+//	@Tags			role
 //	@Accept			json
 //	@Produce		json
 //	@Param			id	query	string	true	"Delete Role Information"
