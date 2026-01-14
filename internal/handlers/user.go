@@ -10,7 +10,6 @@ import (
 	"github.com/billzayy/timesheet-management-be/internal/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 )
 
 type UserHandler struct {
@@ -180,39 +179,27 @@ func (h *UserHandler) GetByEmail(c *gin.Context) {
 	})
 }
 
-// Get User By Id godoc
+// Get User By Token godoc
 //
-//	@Summary		Get User By Id
-//	@Description	Get User Information By Id
+//	@Summary		Get User By Token
+//	@Description	Get User Information By Token
 //	@Tags			user
 //	@Accept			json
 //	@Produce		json
 //	@Security		BearerAuth
-//	@Param			id	path		string	true	"Id User"
 //	@Success		200	{object}	backend.ResponseData
-//	@Router			/user/{id} [get]
-func (h *UserHandler) GetById(c *gin.Context) {
+//	@Router			/user [get]
+func (h *UserHandler) GetByToken(c *gin.Context) {
 	ctx := context.Background()
 
 	var errStr string
 
-	id := c.Param("id")
+	id := backend.GetTokenId(c)
 
-	if id == "" {
-		errStr = "input must not be empty"
-
-		c.JSON(http.StatusBadRequest, backend.ResponseData{
-			Result:  "Error",
-			Success: false,
-			Error:   &errStr,
-		})
-		return
-	}
-
-	data, err := h.service.GetById(ctx, uuid.MustParse(id))
+	data, err := h.service.GetById(ctx, id)
 
 	if err != nil {
-		errStr := err.Error()
+		errStr = err.Error()
 
 		switch {
 		case errors.Is(err, backend.ErrUserNotFound):

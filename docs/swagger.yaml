@@ -649,6 +649,22 @@ paths:
       summary: Delete User By Id
       tags:
       - user
+    get:
+      consumes:
+      - application/json
+      description: Get User Information By Token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get User By Token
+      tags:
+      - user
   /user-config:
     get:
       consumes:
@@ -765,29 +781,6 @@ paths:
       summary: Update User Types
       tags:
       - organization
-  /user/{id}:
-    get:
-      consumes:
-      - application/json
-      description: Get User Information By Id
-      parameters:
-      - description: Id User
-        in: path
-        name: id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/backend.ResponseData'
-      security:
-      - BearerAuth: []
-      summary: Get User By Id
-      tags:
-      - user
   /user/all:
     get:
       consumes:
