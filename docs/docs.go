@@ -748,6 +748,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/user-config": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get User Configuration for App",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Get User Config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/backend.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/user-type/all": {
             "get": {
                 "security": [

@@ -271,3 +271,9 @@ SELECT
 FROM roles r
 JOIN permissions p ON p.name LIKE '%.View%'
 WHERE r.name IN ('View All Project', 'View User');
+
+SELECT 
+    (SELECT id FROM users WHERE sur_name='Admin'), 
+    r.id, 
+    NULL
+FROM roles r WHERE r.name = 'Admin';

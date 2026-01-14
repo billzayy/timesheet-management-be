@@ -13,7 +13,7 @@ type Handlers struct {
 func NewHandlers(s *services.Services) *Handlers {
 	return &Handlers{
 		UserHandler:       NewUserHandler(s.UserService),
-		AuthHandler:       NewAuthHandler(s.AuthService),
+		AuthHandler:       NewAuthHandler(s.AuthService, s.PermissionService),
 		OrganizeHandler:   NewOrganizeHandler(s.OrganizeService),
 		PermissionHandler: NewPermissionHandler(s.PermissionService),
 		RoleHandler:       NewRoleHandler(s.RoleService),

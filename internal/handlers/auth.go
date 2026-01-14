@@ -11,11 +11,12 @@ import (
 )
 
 type AuthHandler struct {
-	service services.AuthService
+	service    services.AuthService
+	permission services.PermissionService
 }
 
-func NewAuthHandler(s services.AuthService) *AuthHandler {
-	return &AuthHandler{s}
+func NewAuthHandler(s services.AuthService, p services.PermissionService) *AuthHandler {
+	return &AuthHandler{s, p}
 }
 
 // Login godoc
@@ -61,6 +62,44 @@ func (h *AuthHandler) Login(c *gin.Context) {
 
 	c.JSON(http.StatusOK, backend.ResponseData{
 		Result:  data,
+		Success: true,
+		Error:   nil,
+	})
+}
+
+// Get User Config godoc
+//
+//	@Summary		Get User Config
+//	@Description	Get User Configuration for App
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Security		BearerAuth
+//	@Success		200		{object}	backend.ResponseData
+//	@Router			/user-config [get]
+func (h *AuthHandler) UserConfig(c *gin.Context) {
+	ctx := context.Background()
+	c.Header("Content-Type", "application/json")
+
+	var errStr string
+
+	id := backend.GetTokenId(c)
+
+	result, err := h.permission.GetAuthConfig(ctx, id)
+
+	if err != nil {
+		errStr = err.Error()
+
+		c.JSON(http.StatusInternalServerError, backend.ResponseData{
+			Result:  nil,
+			Success: false,
+			Error:   &errStr,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, backend.ResponseData{
+		Result:  &result,
 		Success: true,
 		Error:   nil,
 	})

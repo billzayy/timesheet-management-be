@@ -67,7 +67,7 @@ func (s *roleService) GetRoleById(ctx context.Context, id int64) (dto.RolePermis
 		return dto.RolePermissionDTO{}, err
 	}
 
-	grantedNames, err := s.permissionRepo.FindGrantedPermission(id)
+	grantedNames, err := s.permissionRepo.FindGrantedPermissionByRoleId(ctx, id)
 
 	if err != nil {
 		return dto.RolePermissionDTO{}, err

@@ -22,3 +22,12 @@ type RolePermissionDTO struct {
 
 	Users []RoleUserDTO `json:"users"`
 }
+
+type UserConfig struct {
+	Auth AuthConfig `json:"auth"`
+}
+
+type AuthConfig struct {
+	AllPermissions     []string `json:"all_permissions"`
+	GrantedPermissions []string `json:"granted_permissions"`
+}

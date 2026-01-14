@@ -78,3 +78,11 @@ Accept: application/json
   "email": "tuan.phan@gmail.com",
   "password": "20102002"
 }
+
+
+### User Config
+
+GET {{BASE_URL}}/api/user-config HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}

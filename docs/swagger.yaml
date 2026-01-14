@@ -649,6 +649,23 @@ paths:
       summary: Delete User By Id
       tags:
       - user
+  /user-config:
+    get:
+      consumes:
+      - application/json
+      description: Get User Configuration for App
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      security:
+      - BearerAuth: []
+      summary: Get User Config
+      tags:
+      - auth
   /user-type/all:
     get:
       consumes:
