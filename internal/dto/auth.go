@@ -5,6 +5,10 @@ type LoginDTO struct {
 	Password string `json:"password" binding:"required"`
 }
 
+type RefreshDTO struct {
+	RefreshToken string `json:"refresh_token" binding:"required"`
+}
+
 type RespLoginDTO struct {
 	AccessToken  string `json:"access_token"`
 	RefreshToken string `json:"refresh_token"`

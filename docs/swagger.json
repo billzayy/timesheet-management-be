@@ -38,6 +38,40 @@
                 }
             }
         },
+        "/auth/refresh-token": {
+            "post": {
+                "description": "Refresh Timesheet",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Refresh",
+                "parameters": [
+                    {
+                        "description": "Send Token",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.RefreshDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/backend.ResponseData"
+                        }
+                    }
+                }
+            }
+        },
         "/branch/all": {
             "get": {
                 "security": [
@@ -1197,6 +1231,17 @@
                     "type": "string"
                 },
                 "short_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.RefreshDTO": {
+            "type": "object",
+            "required": [
+                "refresh_toke"
+            ],
+            "properties": {
+                "refresh_toke": {
                     "type": "string"
                 }
             }

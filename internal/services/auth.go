@@ -3,7 +3,6 @@ package services
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/billzayy/timesheet-management-be/internal/dto"
 	"github.com/billzayy/timesheet-management-be/internal/middleware"
@@ -39,9 +38,7 @@ func (s *userService) Login(ctx context.Context, input *dto.LoginDTO) (*dto.Resp
 		return nil, fmt.Errorf("password is not valid")
 	}
 
-	expiredTime := time.Now().Add(time.Hour * 24).Unix()
-
-	accessToken, err := middleware.AccessToken(data.ID.String(), expiredTime)
+	accessToken, expiredTime, err := middleware.AccessToken(data.ID.String())
 
 	if err != nil {
 		return nil, err

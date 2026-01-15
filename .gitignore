@@ -5,3 +5,5 @@ migrations/*.down.sql
 .env
 .env.*
 .rest.env
+
+main

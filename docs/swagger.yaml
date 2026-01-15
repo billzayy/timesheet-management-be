@@ -83,6 +83,13 @@ definitions:
     - name
     - short_name
     type: object
+  dto.RefreshDTO:
+    properties:
+      refresh_toke:
+        type: string
+    required:
+    - refresh_toke
+    type: object
   dto.RequestUserDTO:
     properties:
       address:
@@ -212,6 +219,28 @@ paths:
           schema:
             $ref: '#/definitions/backend.ResponseData'
       summary: Login
+      tags:
+      - auth
+  /auth/refresh-token:
+    post:
+      consumes:
+      - application/json
+      description: Refresh Timesheet
+      parameters:
+      - description: Send Token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RefreshDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/backend.ResponseData'
+      summary: Refresh
       tags:
       - auth
   /branch/all:

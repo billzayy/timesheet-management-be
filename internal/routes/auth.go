@@ -10,6 +10,7 @@ func authRoute(r *gin.Engine, h *handlers.Handlers) {
 	api := r.Group("/api/auth")
 	{
 		api.POST("/login", h.AuthHandler.Login)
+		api.POST("/refresh-token", h.AuthHandler.RefreshToken)
 	}
 
 	r.GET("/api/user-config", middleware.AuthMiddleware(), h.AuthHandler.UserConfig)

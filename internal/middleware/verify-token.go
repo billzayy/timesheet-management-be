@@ -63,7 +63,7 @@ func VerifyRefreshToken(tokenString string) (string, error) {
 		return "", errors.New("invalid token claims")
 	}
 
-	userID, ok := claims["userId"].(string)
+	userID, ok := claims["id"].(string)
 	if !ok {
 		return "", errors.New("sub claim missing or invalid")
 	}
